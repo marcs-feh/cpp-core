@@ -18,6 +18,7 @@ using u64 = uint64_t;
 using f32 = float;
 using f64 = double;
 
+using uint    = unsigned int;
 using byte    = uint8_t;
 using rune    = uint32_t;
 using uintptr = uintptr_t;
