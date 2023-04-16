@@ -1,3 +1,6 @@
+#ifndef _types_hpp_include_
+#define _types_hpp_include_
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -24,3 +27,5 @@ static_assert(sizeof(ptrdiff_t) == sizeof(size_t),
               "Could not find suitable ssize. Use NO_SIGNED_SIZE to disable it.");
 using ssize   = ptrdiff_t;
 #endif
+
+#endif /* Include guard */
