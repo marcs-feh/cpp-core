@@ -4,7 +4,6 @@
 #include "types.hpp"
 #include <cstdio>
 
-
 struct Test {
 	uint test_count;
 	uint fail_count;
