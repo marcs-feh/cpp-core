@@ -2,15 +2,29 @@
 #define _allocator_hpp_include_
 
 #include "types.hpp"
+#include "assert.hpp"
 
-static inline
-constexpr bool isPowerOf2(usize n){
+#include <cstddef>
+
+// This function may take any unsigned integer type.
+template<typename T>
+constexpr bool isPowerOf2(T n){
 	return (n & (n - 1)) == 0;
 }
 
-static inline
-constexpr uintptr alignForward(uintptr p, uintptr a){
-	return 0;
+// Align a value to a specific alignment `a`. This function may take any
+// unsigned integer type.
+template<typename T>
+constexpr T alignForward(T p, T a){
+	Assert(isPowerOf2(a), "Alignment must be a power of 2");
+	// Same as mod = p % a but only for powers of 2
+	T mod = p & (a - 1);
+
+	if(mod > 0){
+		p += (a - mod);
+	}
+
+	return p;
 }
 
 // Memory allocator interface
@@ -29,6 +43,8 @@ struct Allocator {
 	// De allocates a pointer owned by allocator and runs type's destructor, returns success status
 	template<typename T>
 	bool destroy(T* ptr);
+	// Default alignment choice
+	static constexpr usize defAlign = alignof(max_align_t);
 };
 
 #endif /* Include guard */
