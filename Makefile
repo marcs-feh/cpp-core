@@ -4,7 +4,17 @@ AR      := ar
 CFLAGS  := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
 LDFLAGS := -L.
 
-.PHONY: clean
+.PHONY: clean run list
+
+list:
+	@echo CC = $(CC)
+	@echo LD = $(LD)
+	@echo AR = $(AR)
+	@echo CFLAGS = $(CFLAGS)
+	@echo LDFLAGS = $(LDFLAGS)
+
+run: bin/test.bin
+	@./bin/test.bin
 
 bin/test.bin: bin/main.o bin/libcppcore.a
 	$(LD) bin/main.o bin/libcppcore.a -o bin/test.bin
@@ -17,8 +27,6 @@ bin/main.o: main.cpp
 
 bin/mem.bump_allocator.o: mem/bump_allocator.cpp
 	$(CC) $(CFLAGS) -c mem/bump_allocator.cpp -o bin/mem.bump_allocator.o
-# @echo CC = $(CC)
-# @echo LD = $(LD)
-# @echo AR = $(AR)
-# @echo CFLAGS = $(CFLAGS)
-# @echo LDFLAGS = $(LDFLAGS)
+
+clean:
+	rm -f bin/*
