@@ -7,6 +7,7 @@
 // Tests
 namespace test {
 #include "_tests/bump_allocator.cpp"
+#include "_tests/dummy.cpp"
 }
 
 int main(){
