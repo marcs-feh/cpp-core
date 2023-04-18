@@ -16,7 +16,7 @@ void* A::allocUndef(usize n){
 	uintptr pad = alignForward(base, defAlign) - base;
 
 	// No memory left.
-	if((base + pad + n) >= (buf + cap)){
+	if((base + pad + n) > (buf + cap)){
 		return nullptr;
 	}
 

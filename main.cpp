@@ -5,7 +5,9 @@
 #include "mem/bump_allocator.hpp"
 
 // Tests
+namespace test {
 #include "_tests/bump_allocator.cpp"
+}
 
 int main(){
 	test::bumpAllocator();

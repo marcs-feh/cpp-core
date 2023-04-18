@@ -47,5 +47,6 @@ struct Test {
 
 // Test Predicate macro, assumes a test named T
 #define Tp(expr) do { T.assert((expr), #expr); } while(0);
+#define T_Log(fmt, ...) std::printf("  >> " fmt "\n", __VA_ARGS__)
 
 #endif /* Include guard */

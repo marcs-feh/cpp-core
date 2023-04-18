@@ -1,7 +1,7 @@
 #ifndef _utils_hpp_include_
 #define _utils_hpp_include_
 
-// TODO: foward, exchange
+// TODO: exchange
 
 template<typename T>
 struct DelReference { typedef T Type;};
