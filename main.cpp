@@ -2,9 +2,13 @@
 #include "test/test.hpp"
 #include "assert.hpp"
 #include "mem/allocator.hpp"
+#include "mem/bump_allocator.hpp"
 
-// TODO: allocator destructor should de-alloc its buffer?
+// Tests
+#include "_tests/bump_allocator.cpp"
 
 int main(){
+	test::bumpAllocator();
 	return 0;
 }
+

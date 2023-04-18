@@ -4,16 +4,17 @@
 #include "allocator.hpp"
 
 struct BumpAllocator : Allocator {
-	usize off;
-	usize cap;
-	void* buf;
+	usize off = 0;
+	usize cap = 0;
+	void* buf = nullptr;
 
 	void* alloc(usize n) override;
 	bool free(void* ptr) override;
 	bool freeAll() override;
 	void* allocUndef(usize n) override;
 
-	BumpAllocator(byte* buf, usize bufsize);
+	BumpAllocator() = default;
+	BumpAllocator(void* buf, usize bufsize);
 	BumpAllocator(BumpAllocator&& al);
 	void operator=(BumpAllocator&& al);
 	BumpAllocator(const BumpAllocator&) = delete;

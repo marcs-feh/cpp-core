@@ -34,6 +34,7 @@ struct Test {
 	Test(const char* title) : test_count{0}, fail_count{0}, title(title){
 		showTitle();
 	}
+
 	~Test(){
 		showResults();
 	}

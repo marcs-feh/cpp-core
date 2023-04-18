@@ -1,28 +1,30 @@
-CC      := clang++ -std=c++17
-LD      := clang++ -fuse-ld=mold
-AR      := ar
-CFLAGS  := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
-LDFLAGS := -L.
+CC := clang++ -std=c++17
+LD := clang++ -fuse-ld=mold
+AR := ar
+override CFLAGS := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
+override LDFLAGS := -L. $(LDFLAGS)
 
 .PHONY: clean run list
 
 list:
-	@echo CC = $(CC)
-	@echo LD = $(LD)
-	@echo AR = $(AR)
-	@echo CFLAGS = $(CFLAGS)
-	@echo LDFLAGS = $(LDFLAGS)
+	@echo 'Available targets: run, build, list, clean'
+	@echo 'Current build options:'
+	@echo "CC = $(CC)"
+	@echo "LD = $(LD)"
+	@echo "AR = $(AR)"
+	@echo "CFLAGS = $(CFLAGS)"
+	@echo "LDFLAGS = $(LDFLAGS)"
 
 run: bin/test.bin
 	@./bin/test.bin
 
-bin/test.bin: bin/main.o bin/libcppcore.a
-	$(LD) bin/main.o bin/libcppcore.a -o bin/test.bin
+bin/test.bin: bin/main.o bin/libc++base.a
+	$(LD) bin/main.o bin/libc++base.a -o bin/test.bin $(LDFLAGS)
 
-bin/libcppcore.a: bin/mem.bump_allocator.o
-	$(AR) rcs bin/libcppcore.a bin/mem.bump_allocator.o
+bin/libc++base.a: bin/mem.bump_allocator.o
+	$(AR) rcs bin/libc++base.a bin/mem.bump_allocator.o
 
-bin/main.o: main.cpp
+bin/main.o: main.cpp _tests/*.cpp
 	$(CC) $(CFLAGS) -c main.cpp -o bin/main.o
 
 bin/mem.bump_allocator.o: mem/bump_allocator.cpp
