@@ -15,10 +15,24 @@ struct Maybe {
 	constexpr
 	bool ok() const { return hasVal; }
 
-	T&& get(){
+	constexpr
+	operator bool() const { return hasVal; }
+
+	T&& get() && {
 		Panic_Assert(hasVal, "Maybe type has no data to get()");
 		hasVal = false;
 		return move(data);
+	}
+
+	T& get() & {
+		Panic_Assert(hasVal, "Maybe type has no data to get()");
+		hasVal = false;
+		return data;
+	}
+
+	const T& get() const& {
+		Panic_Assert(hasVal, "Maybe type has no data to get()");
+		return data;
 	}
 
 	template<typename U>
@@ -66,13 +80,40 @@ struct Maybe {
 	Maybe(T&& v) : data(move(v)), hasVal{true} {}
 	Maybe(const T& v) : data(v), hasVal{true} {}
 
-	Maybe(const Maybe<T>&) = delete;
-	Maybe(Maybe<T>&&) = delete;
+	Maybe(const Maybe<T>& opt) : hasVal(opt.hasVal) {
+		if(hasVal){
+			new (&data) T(opt.get());
+		}
+	}
+
+	Maybe(Maybe<T>&& opt) : hasVal(opt.hasVal) {
+		if(hasVal){
+			new (&data) T(move(opt).get());
+			opt.hasVal = false;
+		}
+	}
+
+	void operator=(const Maybe<T>& opt){
+		if(opt.hasVal){
+			*this = opt.get();
+		} else {
+			destroy();
+		}
+	}
+
+	void operator=(Maybe<T>&& opt){
+		if(opt.hasVal){
+			*this = move(opt).get();
+			opt.hasVal = false;
+		} else {
+			destroy();
+		}
+	}
 
 	~Maybe(){
 		if(hasVal){ data.~T(); }
 	}
-};
 
+};
 
 #endif /* Include guard */
