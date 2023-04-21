@@ -5,14 +5,16 @@
 #include "mem/bump_allocator.hpp"
 
 // Tests
-namespace test {
 #include "_tests/bump_allocator.cpp"
 #include "_tests/dummy.cpp"
-}
+#include "_tests/maybe.cpp"
 
 int main()
 {
-	test::bumpAllocator();
+	int x = 4;
+
+	test_bumpAllocator();
+	test_maybe();
 	return 0;
 }
 

@@ -3,7 +3,7 @@
 
 #include "dummy.cpp"
 
-void bumpAllocator(){
+void test_bumpAllocator(){
 	Test T("Bump Allocator");
 	constexpr usize n = 64;
 	void* buf = new byte[n];

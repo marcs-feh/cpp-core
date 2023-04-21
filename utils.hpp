@@ -10,8 +10,40 @@ struct DelReference<T&> { typedef T Type;};
 template<typename T>
 struct DelReference<T&&>{ typedef T Type;};
 
+// Used to create an integral constant
+template<typename T, T v>
+struct IntegralConst {
+	static constexpr T value = v;
+	typedef T ValueType;
+	constexpr operator ValueType() { return value; }
+};
+
+using FalseType = IntegralConst<bool, false>;
+using TrueType = IntegralConst<bool, true>;
+
+template<typename T>
+struct IsLvalRefType : FalseType {};
+template<typename T>
+struct IsLvalRefType<T&> : TrueType {};
+template<typename T>
+struct IsLvalRefType<T&&> : FalseType {};
+
+template<typename T>
+struct IsRvalRefType : FalseType {};
+template<typename T>
+struct IsRvalRefType<T&> : FalseType {};
+template<typename T>
+struct IsRvalRefType<T&&> : TrueType {};
+
+template<typename T>
+static constexpr bool isLvalRef = IsLvalRefType<T>::value;
+
+template<typename T>
+static constexpr bool isRvalRef = IsRvalRefType<T>::value;
+
 // Transforms something into an r-value reference.
 template<typename T>
+constexpr
 typename DelReference<T>::Type&& move(T&& x){
 	typedef typename DelReference<T>::Type&& RvalRef;
 	return static_cast<RvalRef>(x);
@@ -19,10 +51,20 @@ typename DelReference<T>::Type&& move(T&& x){
 
 // Contitionally moves x, if and only if, x is an r-value reference. Requires
 // passing template type explicitly.
-template<typename T>
-T&& forward(DelReference<T>& x){
-	return static_cast<T&&>(x);
-}
+// template<typename T>
+// constexpr
+// T&& forward(DelReference<T>& x){
+// 	return static_cast<T&&>(x);
+// }
+
+// Contitionally moves x, if and only if, x is an r-value reference. Requires
+// passing template type explicitly.
+// template<typename T>
+// constexpr
+// T&& forward(DelReference<T>&& x){
+// 	static_assert(!isLvalRef<T>, "Cannot forward lvalue to rvalue reference");
+// 	return static_cast<T&&>(x);
+// }
 
 template<typename T>
 const T& max(const T& a, const T& b){

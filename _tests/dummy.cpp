@@ -13,7 +13,7 @@ struct A {
 
 	int* p;
 
-	void reset() {
+	static void reset() {
 		A::ctorUses     = 0;
 		A::dtorUses     = 0;
 		A::copyCtorUses = 0;
@@ -22,12 +22,12 @@ struct A {
 		A::moveAssUses  = 0;
 	}
 
-	A(){ p = new int[500]; A::ctorUses += 1; }
+	A(){ A::ctorUses += 1; }
 	A(const A&){ A::copyCtorUses += 1;}
 	A(A&&){ A::moveCtorUses += 1;}
 	void operator=(const A&){ A::copyAssUses += 1;}
 	void operator=(A&&){ A::moveAssUses += 1;}
-	~A(){ delete [] p; A::dtorUses += 1; }
+	~A(){ A::dtorUses += 1; }
 };
 
 uint A::ctorUses     = 0;
