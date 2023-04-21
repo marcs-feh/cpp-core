@@ -51,20 +51,20 @@ typename DelReference<T>::Type&& move(T&& x){
 
 // Contitionally moves x, if and only if, x is an r-value reference. Requires
 // passing template type explicitly.
-// template<typename T>
-// constexpr
-// T&& forward(DelReference<T>& x){
-// 	return static_cast<T&&>(x);
-// }
+template<typename T>
+constexpr
+T&& forward(typename DelReference<T>::Type& x){
+	return static_cast<T&&>(x);
+}
 
 // Contitionally moves x, if and only if, x is an r-value reference. Requires
 // passing template type explicitly.
-// template<typename T>
-// constexpr
-// T&& forward(DelReference<T>&& x){
-// 	static_assert(!isLvalRef<T>, "Cannot forward lvalue to rvalue reference");
-// 	return static_cast<T&&>(x);
-// }
+template<typename T>
+constexpr
+T&& forward(typename DelReference<T>::Type&& x){
+	static_assert(!isLvalRef<T>, "Cannot forward lvalue to rvalue reference");
+	return static_cast<T&&>(x);
+}
 
 template<typename T>
 const T& max(const T& a, const T& b){
