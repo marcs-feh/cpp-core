@@ -27,6 +27,9 @@ constexpr T alignForward(T p, T a){
 	return p;
 }
 
+// Needed so the compiler doesnt cry about it
+void* operator new(usize, void*) noexcept;
+
 // Memory allocator interface
 struct Allocator {
 	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed

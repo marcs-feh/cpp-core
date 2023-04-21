@@ -10,7 +10,8 @@ namespace test {
 #include "_tests/dummy.cpp"
 }
 
-int main(){
+int main()
+{
 	test::bumpAllocator();
 	return 0;
 }

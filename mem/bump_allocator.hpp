@@ -3,6 +3,7 @@
 
 #include "allocator.hpp"
 
+
 struct BumpAllocator : Allocator {
 	usize off = 0;
 	usize cap = 0;
@@ -19,19 +20,21 @@ struct BumpAllocator : Allocator {
 	void operator=(BumpAllocator&& al);
 	BumpAllocator(const BumpAllocator&) = delete;
 	void operator=(const BumpAllocator&) = delete;
+
+	template<typename T, typename... Args>
+	T* make(Args ...ctorArgs){
+		T* ptr = (T*)alloc(sizeof(T));
+		if(ptr == nullptr){ return nullptr; }
+		return new (ptr) T(ctorArgs...);
+	}
+
+	template<typename T>
+	bool destroy(T* ptr){
+		if(ptr == nullptr){ return true; }
+		ptr->~T();
+		return true;
+	}
+
 	~BumpAllocator();
 };
-
-	// template<typename T, typename... Args>
-	// T* make(Args ...ctorArgs){
-	// 	void* ptr = alloc(sizeof(T));
-	// 	if(ptr == nullptr){ return nullptr; }
-	// 	return new (ptr) T(ctorArgs...);
-	// }
-	//
-	// template<typename T>
-	// bool destroy(T* ptr){
-	// 	if(ptr == nullptr){ return true; }
-	// 	return false;
-	// }
 #endif /* Include guard */

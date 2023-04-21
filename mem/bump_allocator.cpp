@@ -10,7 +10,7 @@ A::BumpAllocator(void* buffer, usize bufsize) : off{0}, cap{0} {
 	cap = bufsize;
 }
 
-void* A::allocUndef(usize n){
+void* A::allocUndef(usize n) {
 	uintptr buf = (uintptr)this->buf;
 	uintptr base = (buf + off);
 	uintptr pad = alignForward(base, defAlign) - base;
@@ -26,7 +26,7 @@ void* A::allocUndef(usize n){
 	return ptr;
 }
 
-void* A::alloc(usize n){
+void* A::alloc(usize n) {
 	byte* p = (byte*)allocUndef(n);
 	if(p != nullptr){
 		// TODO: Vectorize? Or at least fill using word-sized integers.
@@ -38,22 +38,22 @@ void* A::alloc(usize n){
 }
 
 // BumpAllocator does not support individual free
-bool A::free(void*){
+bool A::free(void*) {
 	return false;
 }
 
-bool A::freeAll(){
+bool A::freeAll() {
 	off = 0;
 	return true;
 }
 
-A::BumpAllocator(BumpAllocator&& al) : off{al.off}, cap{al.cap}, buf{al.buf} {
+A::BumpAllocator(BumpAllocator &&al) : off{al.off}, cap{al.cap}, buf{al.buf} {
 	al.buf = nullptr;
 	al.cap = 0;
 	al.off = 0;
 }
 
-void A::operator=(BumpAllocator&& al){
+void A::operator=(BumpAllocator&& al) {
 	al.buf = nullptr;
 	al.cap = 0;
 	al.off = 0;

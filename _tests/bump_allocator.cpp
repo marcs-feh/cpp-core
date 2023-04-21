@@ -1,6 +1,8 @@
 #include "mem/bump_allocator.hpp"
 #include "test/test.hpp"
 
+#include "dummy.cpp"
+
 void bumpAllocator(){
 	Test T("Bump Allocator");
 	constexpr usize n = 64;
@@ -12,6 +14,7 @@ void bumpAllocator(){
 	Tp(al.off == 0);
 	i32* nums = (i32*)al.alloc(sizeof(*nums) * 10);
 	Tp(nums != nullptr);
+
 	bool zeroed = true;
 	for(usize i = 0; i < 10; i += 1){
 		if(nums[i] != 0){ zeroed = false; }
@@ -25,6 +28,9 @@ void bumpAllocator(){
 	Tp(al.freeAll());
 	Tp(al.cap == n);
 	Tp(al.off == 0);
+
+	A *e = al.make<A>();
+	al.destroy(e);
 
 	delete [] (byte*)buf;
 }
