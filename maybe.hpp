@@ -12,6 +12,7 @@ struct Maybe {
 	};
 	bool hasVal;
 
+	constexpr
 	bool ok() const { return hasVal; }
 
 	T&& get(){
@@ -21,14 +22,27 @@ struct Maybe {
 	}
 
 	template<typename U>
-	T&& getOr(U&& alt){
-		if(!hasVal){ return move(alt); }
+	T getOr(U&& alt) const& {
+		if(!hasVal){
+			return static_cast<T>(forward<U>(alt));
+		}
+		return data;
+	}
+
+	template<typename U>
+	T getOr(U&& alt) && {
+		if(!hasVal){
+			return static_cast<T>(forward<U>(alt));
+		}
 		return move(data);
 	}
 
-	Maybe() : hasVal{false} {}
-	Maybe(T&& v) : data(move(v)), hasVal{true} {}
-	Maybe(const T& v) : data(v), hasVal{true} {}
+	void destroy(){
+		if(hasVal){
+			data.~T();
+		}
+		hasVal = false;
+	}
 
 	void operator=(T&& v){
 		if(hasVal){
@@ -47,6 +61,10 @@ struct Maybe {
 		}
 		hasVal = true;
 	}
+
+	Maybe() : hasVal{false} {}
+	Maybe(T&& v) : data(move(v)), hasVal{true} {}
+	Maybe(const T& v) : data(v), hasVal{true} {}
 
 	Maybe(const Maybe<T>&) = delete;
 	Maybe(Maybe<T>&&) = delete;

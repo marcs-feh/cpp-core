@@ -11,7 +11,6 @@
 
 int main()
 {
-
 	test_bumpAllocator();
 	test_maybe();
 	return 0;

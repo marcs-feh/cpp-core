@@ -66,5 +66,15 @@ void test_maybe(){
 		Tp(!n.ok());
 		Tp(n.getOr(x))
 	}
+	// Destroy
+	{
+		A::reset();
+		Maybe<A> a;
+		a = A();
+		Tp(a.ok());
+		a.destroy();
+		Tp(!a.ok());
+	}
+	Tp(A::dtorUses == 2);
 }
 
