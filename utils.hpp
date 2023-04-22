@@ -1,7 +1,7 @@
+// Misc. utilities, mostly template stuff
+
 #ifndef _utils_hpp_include_
 #define _utils_hpp_include_
-
-// TODO: exchange
 
 template<typename T>
 struct DelReference { typedef T Type;};
@@ -19,7 +19,7 @@ struct IntegralConst {
 };
 
 using FalseType = IntegralConst<bool, false>;
-using TrueType = IntegralConst<bool, true>;
+using TrueType  = IntegralConst<bool, true>;
 
 template<typename T>
 struct IsLvalRefType : FalseType {};

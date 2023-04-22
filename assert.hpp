@@ -1,3 +1,7 @@
+// Assert allows to break the program when some condition has not been
+// fulfilled, asserts may be disabled with the ASSERT_DISABLE macro. Panics are
+// similar, however, they are unaffected by ASSERT_DISABLE.
+
 #ifndef _assert_hpp_include_
 #define _assert_hpp_include_
 
@@ -12,7 +16,7 @@
 
 #define Assert(E, M)                                                           \
   As_Statement(if (!(E)) {                                                     \
-    fprintf(stderr, "[Failed assertion] %s\n", M);                             \
+    fprintf(stderr, "[Assert: %s] Failed: %s\n", #E, M);                       \
     Break();                                                                   \
   })
 

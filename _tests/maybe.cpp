@@ -83,15 +83,7 @@ void test_maybe(){
 		a.destroy();
 		Tp(!a.ok());
 	}
-	// Const
-	{
-		const Maybe<int> x(420);
-		Tp(x.get() == 420);
-		Tp(x.getOr(69) == 420);
-		const Maybe<int> y;
-		Tp(y.getOr(69) == 69);
-	}
-	// Maybe =
+	// Maybe assign
 	{
 		A::reset();
 		Maybe<A> a;

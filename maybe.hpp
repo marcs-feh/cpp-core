@@ -1,3 +1,6 @@
+// Maybe indicates an optional value, attempting to extract a non-existing value
+// causes a panic.
+
 #ifndef _maybe_hpp_include_
 #define _maybe_hpp_include_
 
@@ -113,7 +116,6 @@ struct Maybe {
 	~Maybe(){
 		if(hasVal){ data.~T(); }
 	}
-
 };
 
 #endif /* Include guard */

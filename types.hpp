@@ -1,8 +1,9 @@
+// General type definitions
+
 #ifndef _types_hpp_include_
 #define _types_hpp_include_
 
 #include <stdint.h>
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdalign.h>
 

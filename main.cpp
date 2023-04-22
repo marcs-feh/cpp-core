@@ -8,11 +8,12 @@
 #include "_tests/bump_allocator.cpp"
 #include "_tests/dummy.cpp"
 #include "_tests/maybe.cpp"
+#include "_tests/result.cpp"
 
-int main()
-{
+int main() {
 	test_bumpAllocator();
 	test_maybe();
+	test_result();
 	return 0;
 }
 
