@@ -43,4 +43,12 @@ void test_result(){
 		r = Result<A, Error>(Error());
 		Tp(!r.ok());
 	}
+	{
+		Result<int, Error> r;
+		r = 420;
+		Tp(r.getOr(69) == 420);
+		auto e = Error();
+		r = e;
+		Tp(r.getOr(69) == 69);
+	}
 }

@@ -51,6 +51,22 @@ struct Result {
 		return error;
 	}
 
+	template<typename U>
+	T getOr(U&& alt) const& {
+		if(isErr){
+			return static_cast<T>(forward<U>(alt));
+		}
+		return data;
+	}
+
+	template<typename U>
+	T getOr(U&& alt) && {
+		if(isErr){
+			return static_cast<T>(forward<U>(alt));
+		}
+		return move(data);
+	}
+
 	// Value set
 	void operator=(const T& v){
 		if(isErr){
@@ -75,7 +91,7 @@ struct Result {
 	void operator=(const E& e){
 		if(isErr){
 			data.~T();
-			new (&error) T(e);
+			new (&error) E(e);
 		} else {
 			error = e;
 		}
@@ -85,7 +101,7 @@ struct Result {
 	void operator=(E&& e){
 		if(isErr){
 			data.~T();
-			new (&error) T(move(e));
+			new (&error) E(move(e));
 		} else {
 			error = move(e);
 		}
