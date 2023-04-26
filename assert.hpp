@@ -8,7 +8,8 @@
 #include <cstdio>
 #include <cstdlib>
 
-// Convert something to `do {} while(0)` form, this is due to weird eval rules of C/C++
+// Convert something to `do {} while(0)` form, this is due to weird eval rules
+// of C/C++ when it comes to embedding code inside expressions
 #define As_Statement(S) do { S ; } while(0);
 
 // Breaks the program

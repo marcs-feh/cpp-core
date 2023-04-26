@@ -1,4 +1,4 @@
-CC := clang++ -std=c++14
+CC := clang++ -std=c++17
 LD := clang++ -fuse-ld=mold
 AR := ar
 override CFLAGS := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
@@ -16,6 +16,7 @@ list:
 	@echo "LDFLAGS = $(LDFLAGS)"
 
 run: bin/test.bin
+	@mkdir -p bin
 	@./bin/test.bin
 
 bin/test.bin: bin/main.o bin/libc++base.a

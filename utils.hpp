@@ -10,6 +10,7 @@ struct DelReference<T&> { typedef T Type;};
 template<typename T>
 struct DelReference<T&&>{ typedef T Type;};
 
+
 // Used to create an integral constant
 template<typename T, T v>
 struct IntegralConst {

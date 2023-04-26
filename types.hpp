@@ -30,4 +30,7 @@ static_assert(sizeof(ptrdiff_t) == sizeof(size_t),
 using ssize   = ptrdiff_t;
 #endif
 
+// Needed so the compiler doesnt cry about it
+void* operator new(usize, void*) noexcept;
+
 #endif /* Include guard */
