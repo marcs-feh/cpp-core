@@ -22,19 +22,19 @@ struct Maybe {
 	operator bool() const { return hasVal; }
 
 	T&& get() && {
-		Panic_Assert(hasVal, "Maybe type has no data to get()");
+		panicAssert(hasVal, "Maybe type has no data to get()");
 		hasVal = false;
 		return move(data);
 	}
 
 	T& get() & {
-		Panic_Assert(hasVal, "Maybe type has no data to get()");
+		panicAssert(hasVal, "Maybe type has no data to get()");
 		hasVal = false;
 		return data;
 	}
 
 	const T& get() const& {
-		Panic_Assert(hasVal, "Maybe type has no data to get()");
+		panicAssert(hasVal, "Maybe type has no data to get()");
 		return data;
 	}
 

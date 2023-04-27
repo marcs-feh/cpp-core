@@ -68,6 +68,13 @@ T&& forward(typename DelReference<T>::Type&& x){
 }
 
 template<typename T>
+void swap(T& a, T& b){
+	T t = move(b);
+	b   = move(a);
+	a   = move(t);
+}
+
+template<typename T>
 const T& max(const T& a, const T& b){
 	if(a > b){ return a; }
 	return b;

@@ -21,33 +21,33 @@ struct Result {
 
 	// Data access
 	T& get() & {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		panicAssert(!isErr, "Cannot access error value with get()");
 		return data;
 	}
 
 	T&& get() && {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		panicAssert(!isErr, "Cannot access error value with get()");
 		return move(data);
 	}
 
 	const T& get() const& {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		panicAssert(!isErr, "Cannot access error value with get()");
 		return data;
 	}
 
 	// Error access
 	E& err() & {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		panicAssert(isErr, "Cannot access non-error value with err()");
 		return error;
 	}
 
 	E&& err() && {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		panicAssert(isErr, "Cannot access non-error value with err()");
 		return move(error);
 	}
 
 	const E& err() const& {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		panicAssert(isErr, "Cannot access non-error value with err()");
 		return error;
 	}
 

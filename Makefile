@@ -19,11 +19,11 @@ run: bin/test.bin
 	@mkdir -p bin
 	@./bin/test.bin
 
-bin/test.bin: bin/main.o bin/libc++base.a
-	$(LD) bin/main.o bin/libc++base.a -o bin/test.bin $(LDFLAGS)
+bin/test.bin: bin/main.o bin/libc++core.a
+	$(LD) bin/main.o bin/libc++core.a -o bin/test.bin $(LDFLAGS)
 
-bin/libc++base.a: bin/mem.bump_allocator.o
-	$(AR) rcs bin/libc++base.a bin/mem.bump_allocator.o
+bin/libc++core.a: bin/mem.bump_allocator.o
+	$(AR) rcs bin/libc++core.a bin/mem.bump_allocator.o
 
 bin/main.o: main.cpp _tests/*.cpp
 	$(CC) $(CFLAGS) -c main.cpp -o bin/main.o

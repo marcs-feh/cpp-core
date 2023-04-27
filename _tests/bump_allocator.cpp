@@ -29,8 +29,13 @@ void test_bumpAllocator(){
 	Tp(al.cap == n);
 	Tp(al.off == 0);
 
-	A *e = al.make<A>();
-	al.destroy(e);
+	{
+		A::reset();
+		A *e = al.make<A>();
+		Tp(A::ctorUses == 1);
+		al.destroy(e);
+		Tp(A::dtorUses == 1);
+	}
 
 	delete [] (byte*)buf;
 }

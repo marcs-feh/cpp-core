@@ -16,9 +16,7 @@ constexpr bool isPowerOf2(T n){
 // unsigned integer type.
 template<typename T>
 constexpr T alignForward(T p, T a){
-	Assert(isPowerOf2(a), "Alignment must be a power of 2");
-	// Same as mod = p % a but only for powers of 2
-	T mod = p & (a - 1);
+	T mod = p % a;
 
 	if(mod > 0){
 		p += (a - mod);
@@ -26,7 +24,6 @@ constexpr T alignForward(T p, T a){
 
 	return p;
 }
-
 // Memory allocator interface
 struct Allocator {
 	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
