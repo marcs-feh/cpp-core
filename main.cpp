@@ -8,33 +8,14 @@
 #include "_tests/maybe.cpp"
 #include "_tests/result.cpp"
 #include "_tests/defer.cpp"
+#include "_tests/bitfield.cpp"
 
 int main() {
 	test_bumpAllocator();
 	test_maybe();
 	test_result();
 	test_defer();
-	constexpr usize n = 16;
-	Bitfield<n> bf;
-	bf.set(0, 1);
-	bf.set(8, 1);
-	printf("{ %02x %02x }\n", bf.data[0], bf.data[1]);
-	printf("{ ");
-	for(ssize i = (n - 1); i >= 0; i -= 1){
-		// printf("%td:", i);
-		printf("%d ", bf[i]);
-		if((i != 0) && (i % 8 == 0)){ printf("| "); }
-	}
-	printf("}\n");
-	bf.set(9, 1);
-	bf.set(8, 0);
-	printf("{ ");
-	for(ssize i = (n - 1); i >= 0; i -= 1){
-		// printf("%td:", i);
-		printf("%d ", bf[i]);
-		if((i != 0) && (i % 8 == 0)){ printf("| "); }
-	}
-	printf("}\n");
+	test_bitfield();
 	return 0;
 }
 

@@ -1,6 +1,6 @@
 // Defer macro. Due to template deduction rules, the `Defer` macro is only
-// available on C++17 or above, the same effect may be use with C++11 however,
-// with Scope_Exit.
+// available on C++17 or above, the same effect may be achieved with C++11 with
+// Scope_Exit.
 
 #ifndef _defer_hpp_include_
 #define _defer_hpp_include_
