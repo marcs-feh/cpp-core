@@ -91,7 +91,8 @@ struct Bitfield {
 		return res;
 	}
 
-	bool operator==(const Bitfield &bf) {
+	constexpr
+	bool eq(const Bitfield &bf) const {
 		for(usize i = cap() - 1; i > 0; i -= 1){
 			if(bf.data[i] != data[i]){ return false; }
 		}
@@ -102,6 +103,23 @@ struct Bitfield {
 		u8 b0 = bf.data[0] << off;
 		return b0 == b1;
 	}
+
+	template<typename T>
+	constexpr
+	bool eq(const std::initializer_list<T>& l) const {
+		usize n = len() - 1;
+		if(l.size() > len()){ return false; }
+
+		for(auto&& e : l){
+			if(bool(operator[](n)) != bool(e)){ return false; }
+			if(n == 0){ break; }
+			n -= 1;
+		}
+
+		return true;
+	}
+
+	bool operator==(const Bitfield &bf) const { return eq(bf); }
 
 	Bitfield() = default;
 

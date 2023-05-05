@@ -20,11 +20,13 @@ void test_bitfield(){
 	Tp(b0.cap() == 2);
 	Tp(b0.len() == n);
 	b0 = {1, 0, 1, 1, 0};
-	displayBitfield(b0);
+	// displayBitfield(b0);
+	Tp(b0.eq({0,0,0,0,0,0,/**/1,0,1,1,0}));
+	Tp(!b0.eq({0,0,0,0,0,0,/**/0,0,1,1,0}));
 	b1 = b0;
 	Tp(b0 == b1);
 	b1 = {0, 0, 0, 1, 1};
-	displayBitfield(b1);
+	// displayBitfield(b1);
 	b0 = b0 & b1;
-	displayBitfield(b0);
+	// displayBitfield(b0);
 }
