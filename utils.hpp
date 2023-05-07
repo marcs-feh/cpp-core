@@ -75,12 +75,14 @@ void swap(T& a, T& b){
 }
 
 template<typename T>
+constexpr
 const T& max(const T& a, const T& b){
 	if(a > b){ return a; }
 	return b;
 }
 
 template<typename T>
+constexpr
 const T& min(const T& a, const T& b){
 	if(a < b){ return a; }
 	return b;
@@ -91,5 +93,6 @@ struct Pair {
 	Tl left;
 	Tr right;
 };
+
 
 #endif /* Include guard */

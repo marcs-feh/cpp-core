@@ -15,7 +15,8 @@ constexpr bool isPowerOf2(T n){
 // Align a value to a specific alignment `a`. This function may take any
 // unsigned integer type.
 template<typename T>
-constexpr T alignForward(T p, T a){
+constexpr
+T alignForward(T p, T a){
 	T mod = p % a;
 
 	if(mod > 0){

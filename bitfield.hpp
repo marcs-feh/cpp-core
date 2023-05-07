@@ -3,13 +3,42 @@
 #ifndef _bitfield_hpp_include_
 #define _bitfield_hpp_include_
 
-// TODO: Shift operations, bitwise ops
+// TODO: Shift operations
 #include <initializer_list>
 
 #include "utils.hpp"
 #include "types.hpp"
 #include "assert.hpp"
 #include "mem/allocator.hpp"
+
+static inline
+bool isBigEndian(){
+	int n = 1;
+	byte b = ((byte*)(&n))[0];
+	return b == 0;
+}
+
+// static inline
+// void stringifyBits(char* buf, byte b){
+// 	byte mask = 1;
+// 	for(usize i = 0; i < 8; i += 1){
+// 		buf[7 - i] = ((b >> i) & 1) ? '1' : '0';
+// 	}
+// 	buf[8] = 0;
+// }
+//
+// template<typename T>
+// static inline
+// void displayBits(const T& x){
+// 	const byte* bp = (byte*)(&x);
+// 	char buf[9];
+// 	printf("[%s] bits: %zu |", isBigEndian() ? "be" : "le", sizeof(T) * 8);
+// 	for(usize i = 0; i < sizeof(T); i += 1){
+// 		stringifyBits(buf, bp[i]);
+// 		printf("%s|", buf);
+// 	}
+// 	printf("\n");
+// }
 
 template<usize N>
 struct Bitfield {
@@ -26,6 +55,7 @@ struct Bitfield {
 	}
 
 	// Bounds unchecked access
+	constexpr
 	u8 operator[](usize idx) const {
 		usize byteIdx = (N / 8) - (idx / 8);
 		usize bitOff = idx % 8;
@@ -42,6 +72,7 @@ struct Bitfield {
 	}
 
 	// Set bit at position idx to v
+	constexpr
 	void set(usize idx, u8 v){
 		if(idx >= N){ return; }
 		usize byteIdx = (N / 8) - (idx / 8);
@@ -53,12 +84,14 @@ struct Bitfield {
 	}
 
 	// Flip bit at position idx
+	constexpr
 	void flip(usize idx){
 		if(idx >= N){ return; }
 		u8 b = operator[](idx);
 		set(idx, !b);
 	}
 
+	constexpr
 	Bitfield operator|(const Bitfield& bf){
 		Bitfield<N> res;
 		for(usize i = 0; i < cap(); i += 1){
@@ -67,6 +100,7 @@ struct Bitfield {
 		return res;
 	}
 
+	constexpr
 	Bitfield operator~(){
 		Bitfield<N> res;
 		for(usize i = 0; i < cap(); i += 1){
@@ -75,6 +109,7 @@ struct Bitfield {
 		return res;
 	}
 
+	constexpr
 	Bitfield operator&(const Bitfield& bf){
 		Bitfield<N> res;
 		for(usize i = 0; i < cap(); i += 1){
@@ -83,6 +118,7 @@ struct Bitfield {
 		return res;
 	}
 
+	constexpr
 	Bitfield operator^(const Bitfield& bf){
 		Bitfield<N> res;
 		for(usize i = 0; i < cap(); i += 1){
@@ -108,7 +144,7 @@ struct Bitfield {
 	constexpr
 	bool eq(const std::initializer_list<T>& l) const {
 		usize n = len() - 1;
-		if(l.size() > len()){ return false; }
+		if(l.size() != len()){ return false; }
 
 		for(auto&& e : l){
 			if(bool(operator[](n)) != bool(e)){ return false; }
@@ -157,6 +193,5 @@ struct Bitfield {
 
 	static_assert(N > 0, "Bitfield must be at least 1 wide");
 };
-
 
 #endif /* Include guard */

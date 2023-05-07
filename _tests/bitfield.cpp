@@ -14,19 +14,27 @@ void displayBitfield(const Bitfield<N>& bf){
 
 void test_bitfield(){
 	Test T("Bitfield");
-	constexpr usize n = 11;
-	Bitfield<n> b0;
-	Bitfield<n> b1;
-	Tp(b0.cap() == 2);
-	Tp(b0.len() == n);
-	b0 = {1, 0, 1, 1, 0};
-	// displayBitfield(b0);
-	Tp(b0.eq({0,0,0,0,0,0,/**/1,0,1,1,0}));
-	Tp(!b0.eq({0,0,0,0,0,0,/**/0,0,1,1,0}));
-	b1 = b0;
-	Tp(b0 == b1);
-	b1 = {0, 0, 0, 1, 1};
-	// displayBitfield(b1);
-	b0 = b0 & b1;
-	// displayBitfield(b0);
+	{
+		constexpr usize n = 11;
+		Bitfield<n> b0;
+		Bitfield<n> b1;
+		Tp(b0.cap() == 2);
+		Tp(b0.len() == n);
+		b0 = {1, 0, 1, 1, 0};
+		// displayBitfield(b0);
+		Tp(b0.eq({0,0,0,0,0,0,/**/1,0,1,1,0}));
+		Tp(!b0.eq({0,0,0,0,0,0,/**/0,0,1,1,0}));
+		b1 = b0;
+		Tp(b0 == b1);
+	}
+	{
+		constexpr usize n = 6;
+		Bitfield<n> b = {0,0,1,1,0,1};
+		auto r = b & Bitfield<n>({1,1,1,1,1,1});
+		Tp(b == r);
+		r = b | Bitfield<n>({0,0,0,0,0,0});
+		Tp(b == r);
+		r = b ^ Bitfield<n>({1,1,1,1,1,1});
+		Tp((~b) == r);
+	}
 }

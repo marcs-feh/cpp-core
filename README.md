@@ -10,5 +10,5 @@ $ make run
 
 Sanitized build
 ```
-$ make CFLAGS='-fsanitize=address' LDFLAGS='-lasan -lubsan' run
+$ make CFLAGS='-g -fsanitize=address' LDFLAGS='-lasan -lubsan' run
 ```
