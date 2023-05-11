@@ -71,6 +71,27 @@ struct Bitfield {
 		return operator[](idx);
 	}
 
+	// Returns if Bitfield has all of its bits on
+	bool hasAll() const {
+		usize bitOff = (cap() * 8) - len();
+		for(usize i = 1; i <= cap() - 1; i += 1){
+			if(data[cap() - i] != 0xff){ return false; }
+		}
+
+		return data[0] == (u8)(0xff >> bitOff);
+	}
+
+	// Returns if Bitfield has at least one bit on
+	bool hasAny() const {
+		usize bitOff = (cap() * 8) - len();
+		for(usize i = 1; i <= cap() - 1; i += 1){
+			if(data[cap() - i] != 0){ return true; }
+		}
+
+		// printf("bitoff: %zu data[0]:%x shift:%x\n", bitOff, data[0], (u8)(data[0] << bitOff));
+		return ((u8)(data[0] << bitOff)) != 0;
+	}
+
 	// Set bit at position idx to v
 	constexpr
 	void set(usize idx, u8 v){
@@ -183,11 +204,14 @@ struct Bitfield {
 
 	template<typename T>
 	void operator=(const std::initializer_list<T>& l){
-		usize i = min(len(), l.size());
+		usize n = min(len(), l.size());
+
+		for(usize i = 0; i < cap(); i += 1){ data[i] = 0; }
+
 		for(const auto& e : l){
-			i -= 1;
-			set(i, bool(e));
-			if(i == 0){ break; }
+			n -= 1;
+			set(n, bool(e));
+			if(n == 0){ break; }
 		}
 	}
 
