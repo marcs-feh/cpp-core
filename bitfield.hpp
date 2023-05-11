@@ -18,28 +18,6 @@ bool isBigEndian(){
 	return b == 0;
 }
 
-// static inline
-// void stringifyBits(char* buf, byte b){
-// 	byte mask = 1;
-// 	for(usize i = 0; i < 8; i += 1){
-// 		buf[7 - i] = ((b >> i) & 1) ? '1' : '0';
-// 	}
-// 	buf[8] = 0;
-// }
-//
-// template<typename T>
-// static inline
-// void displayBits(const T& x){
-// 	const byte* bp = (byte*)(&x);
-// 	char buf[9];
-// 	printf("[%s] bits: %zu |", isBigEndian() ? "be" : "le", sizeof(T) * 8);
-// 	for(usize i = 0; i < sizeof(T); i += 1){
-// 		stringifyBits(buf, bp[i]);
-// 		printf("%s|", buf);
-// 	}
-// 	printf("\n");
-// }
-
 template<usize N>
 struct Bitfield {
 	u8 data[alignForward(N, sizeof(u8)*8) / 8] = {0};
@@ -54,9 +32,10 @@ struct Bitfield {
 		return alignForward(N, sizeof(u8)*8) / 8;
 	}
 
-	// Bounds unchecked access
+	// Bounds unchecked access when RELEASE_MODE is enabled
 	constexpr
 	u8 operator[](usize idx) const {
+		Assert(idx < N, "Out of bounds access");
 		usize byteIdx = (N / 8) - (idx / 8);
 		usize bitOff = idx % 8;
 		usize bitMask = 1 << bitOff;
@@ -67,11 +46,12 @@ struct Bitfield {
 
 	// Bounds checked access
 	u8 get(usize idx) const {
-		panicAssert(idx < N, "Out of bounds access to Bitfield");
+		Panic_Assert(idx < N, "Out of bounds access to Bitfield");
 		return operator[](idx);
 	}
 
 	// Returns if Bitfield has all of its bits on
+	constexpr
 	bool hasAll() const {
 		usize bitOff = (cap() * 8) - len();
 		for(usize i = 1; i <= cap() - 1; i += 1){
@@ -82,6 +62,7 @@ struct Bitfield {
 	}
 
 	// Returns if Bitfield has at least one bit on
+	constexpr
 	bool hasAny() const {
 		usize bitOff = (cap() * 8) - len();
 		for(usize i = 1; i <= cap() - 1; i += 1){
@@ -218,4 +199,25 @@ struct Bitfield {
 	static_assert(N > 0, "Bitfield must be at least 1 wide");
 };
 
+// static inline
+// void stringifyBits(char* buf, byte b){
+// 	byte mask = 1;
+// 	for(usize i = 0; i < 8; i += 1){
+// 		buf[7 - i] = ((b >> i) & 1) ? '1' : '0';
+// 	}
+// 	buf[8] = 0;
+// }
+//
+// template<typename T>
+// static inline
+// void displayBits(const T& x){
+// 	const byte* bp = (byte*)(&x);
+// 	char buf[9];
+// 	printf("[%s] bits: %zu |", isBigEndian() ? "be" : "le", sizeof(T) * 8);
+// 	for(usize i = 0; i < sizeof(T); i += 1){
+// 		stringifyBits(buf, bp[i]);
+// 		printf("%s|", buf);
+// 	}
+// 	printf("\n");
+// }
 #endif /* Include guard */

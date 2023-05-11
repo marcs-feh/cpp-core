@@ -39,19 +39,19 @@ struct Maybe {
 	}
 
 	template<typename U>
-	T getOr(U&& alt) const& {
-		if(!hasVal){
-			return static_cast<T>(forward<U>(alt));
-		}
-		return data;
-	}
-
-	template<typename U>
 	T getOr(U&& alt) && {
 		if(!hasVal){
 			return static_cast<T>(forward<U>(alt));
 		}
 		return move(data);
+	}
+
+	template<typename U>
+	T getOr(U&& alt) const& {
+		if(!hasVal){
+			return static_cast<T>(forward<U>(alt));
+		}
+		return data;
 	}
 
 	void destroy(){

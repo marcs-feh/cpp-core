@@ -15,6 +15,9 @@ list:
 	@echo "CFLAGS = $(CFLAGS)"
 	@echo "LDFLAGS = $(LDFLAGS)"
 
+build: bin/test.bin
+	@mkdir -p bin
+
 run: bin/test.bin
 	@mkdir -p bin
 	@./bin/test.bin
