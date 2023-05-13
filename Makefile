@@ -34,5 +34,6 @@ bin/main.o: main.cpp _tests/*.cpp
 bin/mem.bump_allocator.o: mem/bump_allocator.cpp
 	$(CC) $(CFLAGS) -c mem/bump_allocator.cpp -o bin/mem.bump_allocator.o
 
+
 clean:
 	rm -f bin/*

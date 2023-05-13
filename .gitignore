@@ -1,4 +1,5 @@
 bin/
+core.hpp
 *.bin
 *.d
 *.slo
