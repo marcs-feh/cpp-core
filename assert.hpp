@@ -23,15 +23,15 @@
 #endif
 
 #if !defined(ASSERT_DISABLE)
-#define Assert(x_, msg_) assertExp((x_), "(" #x_ ") <- " msg_)
+#define Assert(x_, msg_) assert_expr((x_), "(" #x_ ") <- " msg_)
 #else
 #define Assert(x_, msg_)
 #endif
 
-#define Panic_Assert(x_, msg_) panicAssert((x_), "(" #x_ ") <- " msg_)
+#define Panic_Assert(x_, msg_) panic_assert((x_), "(" #x_ ") <- " msg_)
 
 static inline constexpr
-void assertExp([[maybe_unused]] bool cond, [[maybe_unused]] const char* msg = nullptr){
+void assert_expr([[maybe_unused]] bool cond, [[maybe_unused]] const char* msg = nullptr){
 	if(cond){ return; }
 	msg = msg ? msg : "(no message)";
 	std::fprintf(stderr, "[Assert Fail]: %s\n", msg);
@@ -46,12 +46,11 @@ void panic(const char* msg = nullptr){
 }
 
 static inline constexpr
-void panicAssert(bool cond, const char* msg = nullptr){
+void panic_assert(bool cond, const char* msg = nullptr){
 	if(cond){ return; }
 	panic(msg);
 	Break();
 }
-
 
 #undef Break
 #endif /* Include guard */

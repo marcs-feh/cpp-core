@@ -9,11 +9,11 @@ struct Test {
 	uint fail_count;
 	const char* title;
 
-	void showTitle(){
+	void show_title(){
 		std::printf("[ %s%s%s ]\n", white, title, reset);
 	}
 
-	void assertExp(bool expr, const char* msg){
+	void assert_expr(bool expr, const char* msg){
 		test_count += 1;
 		if(!expr){
 			fail_count += 1;
@@ -21,7 +21,7 @@ struct Test {
 		}
 	}
 
-	void showResults(){
+	void show_results(){
 		if(fail_count > 0){
 			std::printf("%sFAIL%s", red, reset);
 		} else {
@@ -32,11 +32,11 @@ struct Test {
 	}
 
 	Test(const char* title) : test_count{0}, fail_count{0}, title(title){
-		showTitle();
+		show_title();
 	}
 
 	~Test(){
-		showResults();
+		show_results();
 	}
 
 	static constexpr char const* red   = "\e[0;31m";
@@ -46,7 +46,7 @@ struct Test {
 };
 
 // Test Predicate macro, assumes a test named T
-#define Tp(expr) do { T.assertExp((expr), #expr); } while(0);
+#define Tp(expr) do { T.assert_expr((expr), #expr); } while(0);
 #define T_Log(fmt, ...) std::printf("  >> " fmt "\n", __VA_ARGS__)
 
 #endif /* Include guard */

@@ -1,4 +1,4 @@
-CC := clang++ -std=c++14
+CC := clang++ -std=c++17
 LD := clang++ -fuse-ld=mold
 AR := ar
 override CFLAGS := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)

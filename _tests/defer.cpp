@@ -6,7 +6,7 @@ void test_defer(){
 
 	int x = 69;
 	{
-		Scope_Exit( x = 420 );
+		Defer { x = 420; };
 		Tp(x == 69);
 	}
 	Tp(x == 420);

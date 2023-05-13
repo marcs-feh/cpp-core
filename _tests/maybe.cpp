@@ -72,7 +72,7 @@ void test_maybe(){
 		int x = move(n).get();
 		Tp(x == 69);
 		Tp(!n.ok());
-		Tp(n.getOr(x))
+		Tp(n.get_or(x))
 	}
 	// Destroy
 	{

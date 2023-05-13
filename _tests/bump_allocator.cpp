@@ -25,7 +25,7 @@ void test_bumpAllocator(){
 	Tp(al.alloc(20) == nullptr);
 	Tp(al.alloc(3) != nullptr);
 
-	Tp(al.deallocAll());
+	Tp(al.dealloc_all());
 	Tp(al.cap == n);
 	Tp(al.off == 0);
 
@@ -36,7 +36,7 @@ void test_bumpAllocator(){
 		al.destroy(e);
 		Tp(A::dtorUses == 1);
 	}
-	al.deallocAll();
+	al.dealloc_all();
 	{
 		A::reset();
 		constexpr uint aCount = 5;

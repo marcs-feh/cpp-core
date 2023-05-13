@@ -22,24 +22,24 @@ struct Maybe {
 	operator bool() const { return hasVal; }
 
 	T&& get() && {
-		panicAssert(hasVal, "Maybe type has no data to get()");
+		Panic_Assert(hasVal, "Maybe type has no data to get()");
 		hasVal = false;
 		return move(data);
 	}
 
 	T& get() & {
-		panicAssert(hasVal, "Maybe type has no data to get()");
+		Panic_Assert(hasVal, "Maybe type has no data to get()");
 		hasVal = false;
 		return data;
 	}
 
 	const T& get() const& {
-		panicAssert(hasVal, "Maybe type has no data to get()");
+		Panic_Assert(hasVal, "Maybe type has no data to get()");
 		return data;
 	}
 
 	template<typename U>
-	T getOr(U&& alt) && {
+	T get_or(U&& alt) && {
 		if(!hasVal){
 			return static_cast<T>(forward<U>(alt));
 		}
@@ -47,7 +47,7 @@ struct Maybe {
 	}
 
 	template<typename U>
-	T getOr(U&& alt) const& {
+	T get_or(U&& alt) const& {
 		if(!hasVal){
 			return static_cast<T>(forward<U>(alt));
 		}

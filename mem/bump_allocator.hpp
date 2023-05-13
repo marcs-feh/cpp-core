@@ -13,8 +13,8 @@ struct BumpAllocator : Allocator {
 
 	void* alloc(usize n) override;
 	bool  dealloc(void* ptr) override;
-	bool  deallocAll() override;
-	void* allocUndef(usize n) override;
+	bool  dealloc_all() override;
+	void* alloc_undef(usize n) override;
 
 	BumpAllocator() = default;
 	BumpAllocator(void* buf, usize bufsize);

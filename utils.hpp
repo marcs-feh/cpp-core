@@ -94,5 +94,4 @@ struct Pair {
 	Tr right;
 };
 
-
 #endif /* Include guard */

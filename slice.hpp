@@ -38,7 +38,7 @@ struct Slice {
 
 	// Get element at position, if out of bounds or slice's data is null, return alt
 	template<typename U>
-	T atOr(usize idx, U&& alt) const {
+	T at_or(usize idx, U&& alt) const {
 		if((idx >= lenght) || (data == nullptr)){
 			return static_cast<T>(forward<U>(alt));
 		}

@@ -10,10 +10,10 @@ A::BumpAllocator(void* buffer, usize bufsize) : off{0}, cap{0} {
 	cap = bufsize;
 }
 
-void* A::allocUndef(usize n) {
+void* A::alloc_undef(usize n) {
 	uintptr buf = (uintptr)this->buf;
 	uintptr base = (buf + off);
-	uintptr pad = alignForward(base, defAlign) - base;
+	uintptr pad = align_forward(base, defAlign) - base;
 
 	// No memory left.
 	if((base + pad + n) > (buf + cap)){
@@ -27,7 +27,7 @@ void* A::allocUndef(usize n) {
 }
 
 void* A::alloc(usize n) {
-	byte* p = (byte*)allocUndef(n);
+	byte* p = (byte*)alloc_undef(n);
 	if(p != nullptr){
 		// TODO: Vectorize? Or at least fill using word-sized integers.
 		for(usize i = 0; i < n; i += 1){
@@ -42,7 +42,7 @@ bool A::dealloc(void*) {
 	return false;
 }
 
-bool A::deallocAll() {
+bool A::dealloc_all() {
 	off = 0;
 	return true;
 }

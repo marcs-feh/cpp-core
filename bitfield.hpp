@@ -3,7 +3,7 @@
 #ifndef _bitfield_hpp_include_
 #define _bitfield_hpp_include_
 
-// TODO: Shift operations
+// TODO: Shift operations, number conv
 #include <initializer_list>
 
 #include "utils.hpp"
@@ -11,16 +11,18 @@
 #include "assert.hpp"
 #include "mem/allocator.hpp"
 
-static inline
-bool isBigEndian(){
-	int n = 1;
-	byte b = ((byte*)(&n))[0];
-	return b == 0;
-}
+// namespace arch {
+// static inline
+// bool isBigEndian(){
+// 	int n = 1;
+// 	byte b = ((byte*)(&n))[0];
+// 	return b == 0;
+// }
+// };
 
 template<usize N>
 struct Bitfield {
-	u8 data[alignForward(N, sizeof(u8)*8) / 8] = {0};
+	u8 data[align_forward(N, sizeof(u8)*8) / 8] = {0};
 
 	constexpr
 	usize len() const {
@@ -29,7 +31,7 @@ struct Bitfield {
 
 	constexpr
 	usize cap() const {
-		return alignForward(N, sizeof(u8)*8) / 8;
+		return align_forward(N, sizeof(u8)*8) / 8;
 	}
 
 	// Bounds unchecked access when RELEASE_MODE is enabled
@@ -199,25 +201,4 @@ struct Bitfield {
 	static_assert(N > 0, "Bitfield must be at least 1 wide");
 };
 
-// static inline
-// void stringifyBits(char* buf, byte b){
-// 	byte mask = 1;
-// 	for(usize i = 0; i < 8; i += 1){
-// 		buf[7 - i] = ((b >> i) & 1) ? '1' : '0';
-// 	}
-// 	buf[8] = 0;
-// }
-//
-// template<typename T>
-// static inline
-// void displayBits(const T& x){
-// 	const byte* bp = (byte*)(&x);
-// 	char buf[9];
-// 	printf("[%s] bits: %zu |", isBigEndian() ? "be" : "le", sizeof(T) * 8);
-// 	for(usize i = 0; i < sizeof(T); i += 1){
-// 		stringifyBits(buf, bp[i]);
-// 		printf("%s|", buf);
-// 	}
-// 	printf("\n");
-// }
 #endif /* Include guard */

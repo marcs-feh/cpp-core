@@ -46,9 +46,9 @@ void test_result(){
 	{
 		Result<int, Error> r;
 		r = 420;
-		Tp(r.getOr(69) == 420);
+		Tp(r.get_or(69) == 420);
 		auto e = Error();
 		r = e;
-		Tp(r.getOr(69) == 69);
+		Tp(r.get_or(69) == 69);
 	}
 }

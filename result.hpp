@@ -21,38 +21,38 @@ struct Result {
 
 	// Data access
 	T& get() & {
-		panicAssert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!isErr, "Cannot access error value with get()");
 		return data;
 	}
 
 	T&& get() && {
-		panicAssert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!isErr, "Cannot access error value with get()");
 		return move(data);
 	}
 
 	const T& get() const& {
-		panicAssert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!isErr, "Cannot access error value with get()");
 		return data;
 	}
 
 	// Error access
 	E& err() & {
-		panicAssert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(isErr, "Cannot access non-error value with err()");
 		return error;
 	}
 
 	E&& err() && {
-		panicAssert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(isErr, "Cannot access non-error value with err()");
 		return move(error);
 	}
 
 	const E& err() const& {
-		panicAssert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(isErr, "Cannot access non-error value with err()");
 		return error;
 	}
 
 	template<typename U>
-	T getOr(U&& alt) const& {
+	T get_or(U&& alt) const& {
 		if(isErr){
 			return static_cast<T>(forward<U>(alt));
 		}
@@ -60,7 +60,7 @@ struct Result {
 	}
 
 	template<typename U>
-	T getOr(U&& alt) && {
+	T get_or(U&& alt) && {
 		if(isErr){
 			return static_cast<T>(forward<U>(alt));
 		}
