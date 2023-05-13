@@ -30,9 +30,9 @@ struct Allocator {
 	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
 	virtual void* alloc(usize n) = 0;
 	// Free a pointer, returns success status. free(nullptr) is always true
-	virtual bool free(void* ptr) = 0;
+	virtual bool dealloc(void* ptr) = 0;
 	// Free all pointers owned by allocator, returns success status
-	virtual bool freeAll() = 0;
+	virtual bool deallocAll() = 0;
 	// Allocate n uninitialized bytes, returns nullptr if allocation failed
 	virtual void* allocUndef(usize n) = 0;
 	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.

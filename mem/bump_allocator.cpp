@@ -37,12 +37,12 @@ void* A::alloc(usize n) {
 	return (void*)p;
 }
 
-// BumpAllocator does not support individual free
-bool A::free(void*) {
+// BumpAllocator does not support individual dealloc
+bool A::dealloc(void*) {
 	return false;
 }
 
-bool A::freeAll() {
+bool A::deallocAll() {
 	off = 0;
 	return true;
 }

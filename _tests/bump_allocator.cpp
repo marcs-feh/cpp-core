@@ -21,11 +21,11 @@ void test_bumpAllocator(){
 	}
 	Tp(zeroed);
 
-	Tp(!al.free(nums));
+	Tp(!al.dealloc(nums));
 	Tp(al.alloc(20) == nullptr);
 	Tp(al.alloc(3) != nullptr);
 
-	Tp(al.freeAll());
+	Tp(al.deallocAll());
 	Tp(al.cap == n);
 	Tp(al.off == 0);
 
@@ -35,6 +35,15 @@ void test_bumpAllocator(){
 		Tp(A::ctorUses == 1);
 		al.destroy(e);
 		Tp(A::dtorUses == 1);
+	}
+	al.deallocAll();
+	{
+		A::reset();
+		constexpr uint aCount = 5;
+		auto aa = al.makeSlice<A>(aCount);
+		Tp(A::ctorUses == aCount);
+		al.destroy(aa);
+		Tp(A::dtorUses == aCount);
 	}
 
 	delete [] (byte*)buf;
