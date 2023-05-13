@@ -10,8 +10,19 @@ struct Slice {
 	usize lenght;
 	T* data;
 
-	constexpr usize len() const { return lenght; }
-	constexpr T* ptr() const { return data; }
+	constexpr
+	usize len() const { return lenght; }
+
+	constexpr
+	T* ptr() const { return data; }
+
+	// A slice is considered null if its pointer is nullptr or its lenght is 0
+	constexpr
+	bool null() const {
+		return (data == nullptr) || (lenght == 0);
+	}
+
+	constexpr operator bool(){ return !null(); }
 
 	// Bounds checked access
 	T& at(usize idx) & {
@@ -55,7 +66,8 @@ struct Slice {
 	}
 
 	// 2 slices are equal if they have the same size and their elements are equal
-	bool eq(const Slice& s) const {
+	constexpr
+	bool operator==(const Slice& s) const {
 		if(s.lenght != lenght){ return false; }
 		for(usize i = 0; i < lenght; i += 1){
 			if(s[i] != data[i]){ return false; }
@@ -63,18 +75,18 @@ struct Slice {
 		return true;
 	}
 
-	Slice() : data{0}, lenght{0} {}
+	Slice() : lenght{0}, data{0} {}
 
-	Slice(T* p, usize l) : data(p), lenght(l) {}
+	Slice(T* p, usize l) : lenght(l), data(p) {}
 
-	Slice(const Slice& s) : data(s.data), lenght(s.lenght) {}
+	Slice(const Slice& s) : lenght(s.lenght), data(s.data) {}
 
-	Slice(Slice&& s) : data(s.data), lenght(s.lenght) {
+	Slice(Slice&& s) : lenght(s.lenght), data(s.data) {
 		s.data = nullptr;
 		s.lenght = 0;
 	}
 
-	void operator=(const Slice&& s){
+	void operator=(const Slice& s){
 		data = s.data;
 		lenght = s.lenght;
 	}
