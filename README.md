@@ -1,4 +1,24 @@
-# C++ Base
+# C++ Core
+
+This is a collection of C++ utilities, they are not a replacement for the STL,
+although I use them as *alternatives*.
+
+The current main design goals are:
+
+- Avoid OOP madness
+- No `throw`s or weird control flow, prioritize returning errors whenever possible
+- Containers that are friendly towards custom allocators
+- Expose internals for user who wish to tinker, but do not force it upon them
+- Avoid excessive templating
+- No `delete[]`, use slices instead
+- Be able to glue everything into one `.cpp` file
+- All modules should be tested
+
+Design non-goals:
+
+- Fully replace the STL (even if I wanted it is impossible without modifying the compiler)
+- System libraries for threading, I/O or networking
+- API stability (you must recompile your code periodically, but I won't go out of my way yo break things)
 
 ## Build
 
@@ -24,3 +44,4 @@ Bundle(){
 }
 Bundle > core.hpp
 ```
+
