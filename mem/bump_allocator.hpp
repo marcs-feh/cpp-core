@@ -6,15 +6,15 @@
 
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
 
-struct BumpAllocator : Allocator {
+struct BumpAllocator {
 	usize off = 0;
 	usize cap = 0;
 	void* buf = nullptr;
 
-	void* alloc(usize n) override;
-	bool  dealloc(void* ptr) override;
-	bool  dealloc_all() override;
-	void* alloc_undef(usize n) override;
+	void* alloc(usize n);
+	bool  dealloc(void* ptr);
+	bool  dealloc_all();
+	void* alloc_undef(usize n);
 
 	BumpAllocator() = default;
 	BumpAllocator(void* buf, usize bufsize);

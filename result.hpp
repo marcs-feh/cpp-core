@@ -14,46 +14,46 @@ struct Result {
 		T data;
 		E error;
 	};
-	bool isErr;
+	bool is_error;
 
-	constexpr bool ok() const { return !isErr; }
-	constexpr operator bool() { return !isErr; }
+	constexpr bool ok() const { return !is_error; }
+	constexpr operator bool() { return !is_error; }
 
 	// Data access
 	T& get() & {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!is_error, "Cannot access error value with get()");
 		return data;
 	}
 
 	T&& get() && {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!is_error, "Cannot access error value with get()");
 		return move(data);
 	}
 
 	const T& get() const& {
-		Panic_Assert(!isErr, "Cannot access error value with get()");
+		Panic_Assert(!is_error, "Cannot access error value with get()");
 		return data;
 	}
 
 	// Error access
 	E& err() & {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(is_error, "Cannot access non-error value with err()");
 		return error;
 	}
 
 	E&& err() && {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(is_error, "Cannot access non-error value with err()");
 		return move(error);
 	}
 
 	const E& err() const& {
-		Panic_Assert(isErr, "Cannot access non-error value with err()");
+		Panic_Assert(is_error, "Cannot access non-error value with err()");
 		return error;
 	}
 
 	template<typename U>
 	T get_or(U&& alt) const& {
-		if(isErr){
+		if(is_error){
 			return static_cast<T>(forward<U>(alt));
 		}
 		return data;
@@ -61,7 +61,7 @@ struct Result {
 
 	template<typename U>
 	T get_or(U&& alt) && {
-		if(isErr){
+		if(is_error){
 			return static_cast<T>(forward<U>(alt));
 		}
 		return move(data);
@@ -69,55 +69,55 @@ struct Result {
 
 	// Value set
 	void operator=(const T& v){
-		if(isErr){
+		if(is_error){
 			error.~E();
 			new (&data) T(v);
 		} else {
 			data = v;
 		}
-		isErr = false;
+		is_error = false;
 	}
 	void operator=(T&& v){
-		if(isErr){
+		if(is_error){
 			error.~E();
 			new (&data) T(move(v));
 		} else {
 			data = move(v);
 		}
-		isErr = false;
+		is_error = false;
 	}
 
 	// Error set
 	void operator=(const E& e){
-		if(isErr){
+		if(is_error){
 			data.~T();
 			new (&error) E(e);
 		} else {
 			error = e;
 		}
-		isErr = true;
+		is_error = true;
 	}
 
 	void operator=(E&& e){
-		if(isErr){
+		if(is_error){
 			data.~T();
 			new (&error) E(move(e));
 		} else {
 			error = move(e);
 		}
-		isErr = true;
+		is_error = true;
 	}
 
-	Result() : error(), isErr(true){}
+	Result() : error(), is_error(true){}
 
-	Result(const E& e) : error(e), isErr(true) {}
-	Result(E&& e) : error(move(e)), isErr(true) {}
+	Result(const E& e) : error(e), is_error(true) {}
+	Result(E&& e) : error(move(e)), is_error(true) {}
 
-	Result(const T& v) : data(v), isErr(false){}
-	Result(T&& v) : data(move(v)), isErr(false){}
+	Result(const T& v) : data(v), is_error(false){}
+	Result(T&& v) : data(move(v)), is_error(false){}
 
-	Result(Result&& r) : isErr(r.isErr){
-		if(isErr){
+	Result(Result&& r) : is_error(r.is_error){
+		if(is_error){
 			new (&error) E(move(r.error));
 		} else {
 			new (&data) T(move(r.data));
@@ -125,8 +125,8 @@ struct Result {
 	}
 
 	void operator=(Result&& r){
-		if(r.isErr){
-			if(isErr){
+		if(r.is_error){
+			if(is_error){
 				error = move(r).error;
 			} else {
 				data.~T();
@@ -134,19 +134,19 @@ struct Result {
 			}
 		}
 		else {
-			if(isErr){
+			if(is_error){
 				error.~E();
 				new (&data) T(move(r).data);
 			} else {
 				data = move(r).data;
 			}
 		}
-		isErr = r.isErr;
+		is_error = r.is_error;
 	}
 
 	void operator=(const Result& r){
-		if(r.isErr){
-			if(isErr){
+		if(r.is_error){
+			if(is_error){
 				error = r.error;
 			} else {
 				data.~T();
@@ -154,7 +154,7 @@ struct Result {
 			}
 		}
 		else {
-			if(isErr){
+			if(is_error){
 				error.~E();
 				new (&data) T(r.data);
 			} else {
@@ -162,11 +162,11 @@ struct Result {
 			}
 		}
 
-		isErr = r.isErr;
+		is_error = r.is_error;
 	}
 
 	~Result(){
-		if(isErr){ error.~E(); }
+		if(is_error){ error.~E(); }
 		else { data.~T(); }
 	}
 };

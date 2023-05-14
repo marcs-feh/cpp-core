@@ -25,24 +25,25 @@ T align_forward(T p, T a){
 
 	return p;
 }
-// Memory allocator interface
-struct Allocator {
-	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
-	virtual void* alloc(usize n) = 0;
-	// Free a pointer, returns success status. free(nullptr) is always true
-	virtual bool dealloc(void* ptr) = 0;
-	// Free all pointers owned by allocator, returns success status
-	virtual bool dealloc_all() = 0;
-	// Allocate n uninitialized bytes, returns nullptr if allocation failed
-	virtual void* alloc_undef(usize n) = 0;
-	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
-	template<typename T, typename... Args>
-	T* make(Args ...ctorArgs);
-	// De allocates a pointer owned by allocator and runs type's destructor, returns success status
-	template<typename T>
-	bool destroy(T* ptr);
-	// Default alignment choice
-	static constexpr usize defAlign = alignof(max_align_t);
-};
+
+// // Memory allocator interface
+// struct Allocator {
+// 	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
+// 	virtual void* alloc(usize n) = 0;
+// 	// Free a pointer, returns success status. free(nullptr) is always true
+// 	virtual bool dealloc(void* ptr) = 0;
+// 	// Free all pointers owned by allocator, returns success status
+// 	virtual bool dealloc_all() = 0;
+// 	// Allocate n uninitialized bytes, returns nullptr if allocation failed
+// 	virtual void* alloc_undef(usize n) = 0;
+// 	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
+// 	template<typename T, typename... Args>
+// 	T* make(Args ...ctorArgs);
+// 	// De allocates a pointer owned by allocator and runs type's destructor, returns success status
+// 	template<typename T>
+// 	bool destroy(T* ptr);
+// 	// Default alignment choice
+// 	static constexpr usize defAlign = alignof(max_align_t);
+// };
 
 #endif /* Include guard */
