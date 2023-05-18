@@ -1,20 +1,22 @@
+// A bump allocator is a flat array of memory that has a max capacity and an
+// offset. Allocating "bumps" the offset forward, and De-allocating all memory
+// is simply resetting the offset
+
 #ifndef _bump_allocator_hpp_include_
 #define _bump_allocator_hpp_include_
 
 #include "allocator.hpp"
 #include "slice.hpp"
 
-// TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
-
-struct BumpAllocator {
+struct BumpAllocator : Allocator {
 	usize off = 0;
 	usize cap = 0;
 	void* buf = nullptr;
 
-	void* alloc(usize n);
-	bool  dealloc(void* ptr);
-	bool  dealloc_all();
-	void* alloc_undef(usize n);
+	void* alloc(usize n) override;
+	void  dealloc(void* ptr) override;
+	void  dealloc_all() override;
+	void* alloc_undef(usize n) override;
 
 	BumpAllocator() = default;
 	BumpAllocator(void* buf, usize bufsize);
@@ -51,7 +53,6 @@ struct BumpAllocator {
 		return true;
 	}
 
-	// TODO: ownership check
 	template<typename T>
 	bool destroy(Slice<T>& s){
 		if(!s){ return true; }

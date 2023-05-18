@@ -2,7 +2,7 @@ CC := clang++ -std=c++20
 LD := clang++ -fuse-ld=mold
 AR := ar
 override CFLAGS := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
-override LDFLAGS := -L. $(LDFLAGS)
+override LDFLAGS := -lm -L. $(LDFLAGS)
 
 .PHONY: clean run list
 

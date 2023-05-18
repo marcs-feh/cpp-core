@@ -38,13 +38,12 @@ void* A::alloc(usize n) {
 }
 
 // BumpAllocator does not support individual dealloc
-bool A::dealloc(void*) {
-	return false;
+void A::dealloc(void*){
+	return;
 }
 
-bool A::dealloc_all() {
+void A::dealloc_all() {
 	off = 0;
-	return true;
 }
 
 A::BumpAllocator(BumpAllocator &&al) : off{al.off}, cap{al.cap}, buf{al.buf} {

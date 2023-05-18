@@ -8,6 +8,7 @@
 #include "_tests/defer.cpp"
 #include "_tests/bitfield.cpp"
 #include "_tests/slice.cpp"
+#include "_tests/vec.cpp"
 
 int main() {
 	test_bumpAllocator();
@@ -16,6 +17,7 @@ int main() {
 	test_defer();
 	test_bitfield();
 	test_slice();
+	test_vec();
 	return 0;
 }
 

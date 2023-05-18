@@ -1,3 +1,7 @@
+// A Slice is a very lightweight wrapper around pointers, it adds optional
+// bounds checking and size information, a Slice does not own its pointer and
+// will never free it.
+
 #ifndef _slice_hpp_include_
 #define _slice_hpp_include_
 

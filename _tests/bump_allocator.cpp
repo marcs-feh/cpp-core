@@ -21,11 +21,11 @@ void test_bumpAllocator(){
 	}
 	Tp(zeroed);
 
-	Tp(!al.dealloc(nums));
+	al.dealloc(nums);
 	Tp(al.alloc(20) == nullptr);
 	Tp(al.alloc(3) != nullptr);
 
-	Tp(al.dealloc_all());
+	al.dealloc_all();
 	Tp(al.cap == n);
 	Tp(al.off == 0);
 
