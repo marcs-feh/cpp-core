@@ -18,9 +18,10 @@ void test_slice(){
 	Tp(s0 == s1);
 
 	s0 = move(s1);
-	Tp(s1.null() && !s1);
-	Tp(s0);
 
+	Tp(s1.null() && !s0.null());
+	Tp(!s1 && s0);
+	Tp(s0);
 }
 
 

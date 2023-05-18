@@ -10,7 +10,6 @@ struct DelReference<T&> { typedef T Type;};
 template<typename T>
 struct DelReference<T&&>{ typedef T Type;};
 
-
 // Used to create an integral constant
 template<typename T, T v>
 struct IntegralConst {
@@ -38,7 +37,6 @@ struct IsRvalRefType<T&&> : TrueType {};
 
 template<typename T>
 static constexpr bool isLvalRef = IsLvalRefType<T>::value;
-
 template<typename T>
 static constexpr bool isRvalRef = IsRvalRefType<T>::value;
 
@@ -68,10 +66,19 @@ T&& forward(typename DelReference<T>::Type&& x){
 }
 
 template<typename T>
+constexpr
 void swap(T& a, T& b){
 	T t = move(b);
 	b   = move(a);
 	a   = move(t);
+}
+
+// Replaces x with val and returns the old value of x
+template<typename T, typename U = T>
+T exchange(T& x, U&& val){
+	T t = move(x);
+	x   = forward<U>(val);
+	return t;
 }
 
 template<typename T>

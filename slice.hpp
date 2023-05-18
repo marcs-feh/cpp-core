@@ -86,20 +86,18 @@ struct Slice {
 	Slice(const Slice& s) : lenght(s.lenght), data(s.data) {}
 
 	Slice(Slice&& s) : lenght(s.lenght), data(s.data) {
-		s.data = nullptr;
+		s.data   = nullptr;
 		s.lenght = 0;
 	}
 
 	void operator=(const Slice& s){
-		data = s.data;
+		data   = s.data;
 		lenght = s.lenght;
 	}
 
 	void operator=(Slice&& s){
-		data = s.data;
-		lenght = s.lenght;
-		s.lenght = 0;
-		s.data = nullptr;
+		data   = exchange(s.data, nullptr);
+		lenght = exchange(s.lenght, 0);
 	}
 
 	~Slice() = default;

@@ -11,15 +11,6 @@
 #include "assert.hpp"
 #include "mem/allocator.hpp"
 
-// namespace arch {
-// static inline
-// bool isBigEndian(){
-// 	int n = 1;
-// 	byte b = ((byte*)(&n))[0];
-// 	return b == 0;
-// }
-// };
-
 template<usize N>
 struct Bitfield {
 	u8 data[align_forward(N, sizeof(u8)*8) / 8] = {0};
