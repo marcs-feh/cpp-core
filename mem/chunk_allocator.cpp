@@ -22,7 +22,6 @@ void A::dealloc(void* ptr){
 	free_list.add(node);
 }
 
-
 void A::dealloc_all(){
 	byte* ptr = (byte*)data;
 	for(uintptr i = 0; i < chunk_count; i += 1){
@@ -37,26 +36,32 @@ void* A::alloc_undef(usize n){
 	return free_list.pop();
 }
 
+// #include <cstdio>
 A::ChunkAllocator(void* buf, usize bufsize, usize chunk_sz, usize chunk_n)
 : free_list() {
 	uintptr unaligned = (uintptr)buf;
 	uintptr aligned   = align_forward(unaligned, defAlign);
 	uintptr shift     = aligned - unaligned;
-	usize actual_size = bufsize - shift;
 
-	bool dontfit = (chunk_sz < sizeof(FreeList)) ||
-		             ((chunk_sz * chunk_n) > actual_size) ||
-		             (chunk_n == 0);
-	if(dontfit){
+	usize true_bufsize   = bufsize - shift;
+	usize true_chunksize = align_forward(chunk_sz, defAlign);
+	usize min_required   = sizeof(FreeList) * chunk_n;
+	usize will_need      = max(true_chunksize * chunk_n, min_required);
+
+	// printf("chunky:\n  wants:%zu\n  bufsize:%zu\n  chunksize:%zu\n", will_need, true_bufsize, true_chunksize);
+	bool ok = (true_bufsize >= will_need) &&
+		        (chunk_n > 0) && (true_chunksize > 0);
+	if(!ok){
 		*this = ChunkAllocator();
 		return;
 	}
 
 	data        = (void*)aligned;
-	chunk_size  = chunk_sz;
+	chunk_size  = true_chunksize;
+	buf_size    = true_bufsize;
 	chunk_count = chunk_n;
-	buf_size    = bufsize;
 
+	dealloc_all();
 }
 
 void List::add(Node* node){

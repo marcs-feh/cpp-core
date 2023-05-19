@@ -8,7 +8,25 @@ using namespace core;
 
 void test_chunkAllocator(){
 	Test T("Chunk Allocator");
-	ChunkAllocator al;
+	constexpr usize n = 200;
+	byte* buf = new byte[n];
+	{
+		{
+			auto toomuch   = ChunkAllocator(buf, n, 10, 80);
+			auto toolittle = ChunkAllocator(buf, n, 100, 0);
+			auto justright = ChunkAllocator(buf, n, 10, 10);
+			Tp(toomuch.data == nullptr);
+			Tp(toolittle.data == nullptr);
+			Tp(justright.data != nullptr);
+		}
+		{
+			auto toomuch   = ChunkAllocator(buf, n, 100, 2);
+			auto toolittle = ChunkAllocator(buf, n, 0, 23);
+			Tp(toomuch.data == nullptr);
+			Tp(toolittle.data == nullptr);
+		}
+	}
+
 }
 
 
