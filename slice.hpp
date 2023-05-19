@@ -9,6 +9,8 @@
 #include "utils.hpp"
 #include "assert.hpp"
 
+namespace core {
+
 template<typename T>
 struct Slice {
 	usize lenght;
@@ -103,4 +105,5 @@ struct Slice {
 	~Slice() = default;
 };
 
+}
 #endif /* Include guard */

@@ -3,6 +3,8 @@
 #ifndef _utils_hpp_include_
 #define _utils_hpp_include_
 
+namespace core {
+
 template<typename T>
 struct DelReference { typedef T Type;};
 template<typename T>
@@ -95,10 +97,18 @@ const T& min(const T& a, const T& b){
 	return b;
 }
 
+template<typename T>
+constexpr
+T abs(const T& n){
+	return n < 0 ? -n : n;
+}
+
 template<typename Tl, typename Tr>
 struct Pair {
 	Tl left;
 	Tr right;
 };
+
+}
 
 #endif /* Include guard */

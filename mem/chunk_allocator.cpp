@@ -1,8 +1,8 @@
 #include "chunk_allocator.hpp"
 
-using A    = ChunkAllocator;
-using List = ChunkAllocator::FreeList;
-using Node = ChunkAllocator::Node;
+using A    = core::ChunkAllocator;
+using List = core::ChunkAllocator::FreeList;
+using Node = core::ChunkAllocator::Node;
 
 // Bump allocator always allocates the same size, alloc will check if n fits
 // into a chunk and if a free chunk is available.

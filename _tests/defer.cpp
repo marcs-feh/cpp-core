@@ -1,5 +1,6 @@
 #include "defer.hpp"
 #include "test/test.hpp"
+using namespace core;
 
 void test_defer(){
 	Test T("Defer");

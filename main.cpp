@@ -1,5 +1,4 @@
 #include "test/test.hpp"
-
 // Tests
 #include "_tests/bump_allocator.cpp"
 #include "_tests/dummy.cpp"
@@ -8,7 +7,7 @@
 #include "_tests/defer.cpp"
 #include "_tests/bitfield.cpp"
 #include "_tests/slice.cpp"
-#include "_tests/vec.cpp"
+#include "_tests/complex.cpp"
 
 int main() {
 	test_bumpAllocator();
@@ -17,7 +16,7 @@ int main() {
 	test_defer();
 	test_bitfield();
 	test_slice();
-	test_vec();
+	test_complex();
 	return 0;
 }
 

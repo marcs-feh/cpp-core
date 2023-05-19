@@ -3,6 +3,7 @@
 
 #include "allocator.hpp"
 
+namespace core {
 struct ChunkAllocator : Allocator {
 	struct Node {
 		Node* next = nullptr;
@@ -28,5 +29,5 @@ struct ChunkAllocator : Allocator {
 	ChunkAllocator(void* buf, usize bufsize);
 
 };
-
+}
 #endif /* Include guard */

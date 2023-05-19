@@ -7,7 +7,10 @@
 
 #include "utils.hpp"
 
+namespace core {
+
 namespace defer_impl {
+
 template<typename F>
 struct Call {
 	F fn;
@@ -19,6 +22,8 @@ template<typename F>
 Call<F> wrapFunc(F&& f){
 	return Call<F>(forward<F>(f));
 }
+}
+
 }
 
 #define Defer_Concat0(x, y) x##y

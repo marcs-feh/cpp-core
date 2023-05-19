@@ -8,6 +8,7 @@
 #include "assert.hpp"
 #include "utils.hpp"
 
+namespace core {
 template<typename T, typename E>
 struct Result {
 	union {
@@ -170,5 +171,6 @@ struct Result {
 		else { data.~T(); }
 	}
 };
+}
 
 #endif /* Include guard */

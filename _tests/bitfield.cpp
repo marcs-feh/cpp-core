@@ -1,6 +1,8 @@
 #include "test/test.hpp"
 #include "bitfield.hpp"
 
+using namespace core;
+
 template<usize N>
 void displayBitfield(const Bitfield<N>& bf){
 	printf("[");

@@ -11,6 +11,8 @@
 #include "assert.hpp"
 #include "mem/allocator.hpp"
 
+namespace core {
+
 template<usize N>
 struct Bitfield {
 	u8 data[align_forward(N, sizeof(u8)*8) / 8] = {0};
@@ -192,4 +194,5 @@ struct Bitfield {
 	static_assert(N > 0, "Bitfield must be at least 1 wide");
 };
 
+}
 #endif /* Include guard */

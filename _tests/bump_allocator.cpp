@@ -1,5 +1,6 @@
 #include "mem/bump_allocator.hpp"
 #include "test/test.hpp"
+using namespace core;
 
 #include "dummy.cpp"
 

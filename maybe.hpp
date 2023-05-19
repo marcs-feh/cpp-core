@@ -7,6 +7,7 @@
 #include "assert.hpp"
 #include "utils.hpp"
 #include <utility>
+namespace core {
 
 template<typename T>
 struct Maybe {
@@ -117,5 +118,7 @@ struct Maybe {
 		if(has_value){ data.~T(); }
 	}
 };
+
+}
 
 #endif /* Include guard */

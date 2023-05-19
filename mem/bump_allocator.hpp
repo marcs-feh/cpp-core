@@ -8,6 +8,8 @@
 #include "allocator.hpp"
 #include "slice.hpp"
 
+namespace core {
+
 struct BumpAllocator : Allocator {
 	usize off = 0;
 	usize cap = 0;
@@ -67,4 +69,5 @@ struct BumpAllocator : Allocator {
 
 	~BumpAllocator();
 };
+}
 #endif /* Include guard */

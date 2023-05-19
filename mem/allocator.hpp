@@ -4,8 +4,8 @@
 #include "types.hpp"
 #include "assert.hpp"
 #include "utils.hpp"
-
 #include <cstddef>
+namespace core {
 
 // TODO: Stop using virtual for Allocator
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
@@ -57,5 +57,7 @@ struct Allocator {
 	// Default alignment choice
 	static constexpr usize defAlign = alignof(max_align_t);
 };
+
+}
 
 #endif /* Include guard */

@@ -1,6 +1,6 @@
 #include "bump_allocator.hpp"
 
-using A = BumpAllocator;
+using A = core::BumpAllocator;
 
 A::BumpAllocator(void* buffer, usize bufsize) : off{0}, cap{0} {
 	if(buffer == nullptr){

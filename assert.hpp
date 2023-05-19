@@ -6,9 +6,10 @@
 #ifndef _assert_hpp_include_
 #define _assert_hpp_include_
 
-
 #include <cstdio>
 #include <cstdlib>
+
+namespace core {
 
 // Breaks the program, define this to your liking
 #define Break() { std::abort(); }
@@ -19,17 +20,17 @@
 #endif
 
 #if !defined(ASSERT_DISABLE)
-#define Assert(x_, msg_) assert_expr((x_), "(" #x_ ") <- " msg_)
+#define Assert(x_, msg_) core::assert_expr((x_), "(" #x_ ") <- " msg_)
 #else
 #define Assert(x_, msg_)
 #endif
 
 #if defined(OVERRIDE_ASSERT_MACRO)
 #undef assert
-#define assert(x_, msg_) assert_expr((x_), "(" #x_ ") <- " msg_)
+#define assert(x_, msg_) core::assert_expr((x_), "(" #x_ ") <- " msg_)
 #endif
 
-#define Panic_Assert(x_, msg_) panic_assert((x_), "(" #x_ ") <- " msg_)
+#define Panic_Assert(x_, msg_) core::panic_assert((x_), "(" #x_ ") <- " msg_)
 
 static inline constexpr
 void assert_expr([[maybe_unused]] bool cond, [[maybe_unused]] const char* msg = nullptr){
@@ -51,6 +52,8 @@ void panic_assert(bool cond, const char* msg = nullptr){
 	if(cond){ return; }
 	panic(msg);
 	Break();
+}
+
 }
 
 #undef Break
