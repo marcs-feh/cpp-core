@@ -4,11 +4,14 @@
 #include "types.hpp"
 #include "assert.hpp"
 #include "utils.hpp"
+#include "slice.hpp"
 #include <cstddef>
-namespace core {
 
 // TODO: Stop using virtual for Allocator
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
+// TODO: Memset impl
+
+namespace core {
 
 // This function may take any unsigned integer type.
 template<typename T>
@@ -51,10 +54,17 @@ struct Allocator {
 	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
 	template<typename T, typename... Args>
 	T* make(Args ...ctorArgs);
+	// Allocate a slice of a type with length `n` and run its constructor with args in-place, returns null slice if failed.
+	template<typename T, typename... Args>
+	Slice<T> makeSlice(usize n, Args ...ctorArgs);
 	// De allocates a pointer owned by allocator and runs type's destructor, returns success status
 	template<typename T>
-	bool destroy(T* ptr);
-	// Default alignment choice
+	void destroy(T* ptr);
+	// De allocates a slice owned by allocator and runs type's destructor, returns success status
+	template<typename T>
+	void destroy(Slice<T>& s);
+
+	// Default memory alignment choice
 	static constexpr usize defAlign = alignof(max_align_t);
 };
 

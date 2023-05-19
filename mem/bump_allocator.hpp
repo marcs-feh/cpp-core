@@ -49,22 +49,20 @@ struct BumpAllocator : Allocator {
 	}
 
 	template<typename T>
-	bool destroy(T* ptr){
-		if(ptr == nullptr){ return true; }
+	void destroy(T* ptr){
+		if(ptr == nullptr){ return; }
 		ptr->~T();
-		return true;
 	}
 
 	template<typename T>
-	bool destroy(Slice<T>& s){
-		if(!s){ return true; }
+	void destroy(Slice<T>& s){
+		if(!s){ return; }
 		usize n = s.len();
 		for(usize i = 0; i < n; i += 1){
 			s[i].~T();
 		}
 		dealloc(s.ptr());
 		s = Slice<T>(); // Clear slice
-		return true;
 	}
 
 	~BumpAllocator();
