@@ -26,6 +26,8 @@ struct ChunkAllocator : Allocator {
 	void  dealloc_all() override;
 	void* alloc_undef(usize n) override;
 
+	usize free_chunk_count() const;
+
 	ChunkAllocator() = default;
 	ChunkAllocator(void* buf, usize bufsize, usize chunk_size, usize chunk_count);
 
@@ -39,12 +41,41 @@ struct ChunkAllocator : Allocator {
 		return p;
 	}
 
+	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
+	template<typename T, typename... Args>
+	Slice<T> makeSlice(usize n, Args ...ctorArgs){
+		if(n == 0){ return Slice<T>(); }
+
+		T* p = (T*)alloc(sizeof(T) * n);
+		Slice<T> s = Slice(p, n);
+
+		if(p != nullptr){
+			usize n = s.len();
+			for(usize i = 0; i < n; i += 1){
+				new (s.data + i) T(ctorArgs...);
+			}
+		}
+
+		return s;
+	}
+
+
 	// De allocates a pointer owned by allocator and runs type's destructor
 	template<typename T>
 	void destroy(T* ptr){
 		if(!ptr){ return; }
 		ptr->~T();
 		dealloc(ptr);
+	}
+
+	template<typename T>
+	void destroy(Slice<T>& s){
+		if(!s){ return; }
+		usize n = s.len();
+		for(usize i = 0; i < n; i += 1){
+			s[i].~T();
+		}
+		dealloc(s.ptr());
 	}
 
 	static_assert(sizeof(FreeList) == sizeof(Node), "Free list isnt the same size as node, that's a big problem");

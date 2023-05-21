@@ -4,6 +4,18 @@ using A    = core::ChunkAllocator;
 using List = core::ChunkAllocator::FreeList;
 using Node = core::ChunkAllocator::Node;
 
+usize A::free_chunk_count() const {
+	Node* cur = free_list.head;
+	if(cur == nullptr){ return 0; }
+
+	usize n;
+	for(n = 1; cur->next != nullptr; cur = cur->next){
+		n += 1;
+	}
+
+	return n;
+}
+
 // Bump allocator always allocates the same size, alloc will check if n fits
 // into a chunk and if a free chunk is available.
 void* A::alloc(usize n){

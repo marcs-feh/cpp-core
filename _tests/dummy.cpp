@@ -2,6 +2,7 @@
 #define _dummy_cpp_include_
 
 #include "types.hpp"
+#include <cstdio>
 // Dummy classes for testing move semantics activation.
 struct A {
 	static uint ctorUses;
@@ -21,6 +22,16 @@ struct A {
 		A::copyAssUses  = 0;
 		A::moveAssUses  = 0;
 	}
+	static void display(){
+		std::printf("ctorUses     = %d\n"
+		            "dtorUses     = %d\n"
+		            "copyCtorUses = %d\n"
+		            "moveCtorUses = %d\n"
+		            "copyAssUses  = %d\n"
+		            "moveAssUses  = %d\n",
+		            A::ctorUses, A::dtorUses, A::copyCtorUses,
+		            A::moveCtorUses, A::copyAssUses, A::moveAssUses);
+	}
 
 	A(){ A::ctorUses += 1; }
 	A(const A&){ A::copyCtorUses += 1;}
@@ -28,6 +39,7 @@ struct A {
 	void operator=(const A&){ A::copyAssUses += 1;}
 	void operator=(A&&){ A::moveAssUses += 1;}
 	~A(){ A::dtorUses += 1; }
+
 };
 
 uint A::ctorUses     = 0;

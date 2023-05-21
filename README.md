@@ -8,11 +8,11 @@ The current main design goals are:
 - Avoid OOP madness
 - No `throw`s or weird control flow, prioritize returning errors whenever possible
 - Containers that are friendly towards custom allocators
-- Expose internals for user who wish to tinker, but do not force it upon them
+- Expose internals for users who wish to tinker, but do not force it upon them
 - Avoid excessive templating
 - No `delete[]`, use slices instead
 - Be able to glue everything into one `.cpp` file
-- All modules should be tested
+- Test coverage
 
 Design non-goals:
 
@@ -42,6 +42,6 @@ Bundle(){
     done
     echo '#endif /* Include guard */'
 }
-Bundle > core.hpp
+Bundle > _core.hpp
 ```
 

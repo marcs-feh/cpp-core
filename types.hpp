@@ -1,4 +1,6 @@
 // General type definitions
+// This is the only header that is not namespaced and probably never will, these
+// type definitions are extremely fundamental, change it with care.
 
 #ifndef _types_hpp_include_
 #define _types_hpp_include_

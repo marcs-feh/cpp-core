@@ -1,8 +1,8 @@
 CC := clang++ -std=c++20
 LD := clang++ -fuse-ld=mold
 AR := ar
-override CFLAGS := -O2 -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
-override LDFLAGS := -lm -L. $(LDFLAGS)
+override CFLAGS := -Os -march=native -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
+override LDFLAGS := $(LDFLAGS) -lm -L.
 
 .PHONY: clean run list
 
