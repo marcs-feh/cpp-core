@@ -29,10 +29,7 @@ void* A::alloc_undef(usize n) {
 void* A::alloc(usize n) {
 	byte* p = (byte*)alloc_undef(n);
 	if(p != nullptr){
-		// TODO: Vectorize? Or at least fill using word-sized integers.
-		for(usize i = 0; i < n; i += 1){
-			p[i] = 0;
-		}
+		mem_zero(p, n);
 	}
 	return (void*)p;
 }

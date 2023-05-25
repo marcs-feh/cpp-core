@@ -26,6 +26,11 @@ struct ChunkAllocator : Allocator {
 	void  dealloc_all() override;
 	void* alloc_undef(usize n) override;
 
+	constexpr
+	u8 capabilities() override {
+		return can_dealloc_one | can_dealloc_all;
+	}
+
 	usize free_chunk_count() const;
 
 	ChunkAllocator() = default;

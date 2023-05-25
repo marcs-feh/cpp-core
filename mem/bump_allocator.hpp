@@ -20,6 +20,11 @@ struct BumpAllocator : Allocator {
 	void  dealloc_all() override;
 	void* alloc_undef(usize n) override;
 
+	constexpr
+	u8 capabilities() override {
+		return can_alloc_any | can_dealloc_all;
+	}
+
 	BumpAllocator() = default;
 	BumpAllocator(void* buf, usize bufsize);
 
@@ -28,6 +33,7 @@ struct BumpAllocator : Allocator {
 
 	BumpAllocator(const BumpAllocator&) = delete;
 	void operator=(const BumpAllocator&) = delete;
+
 
 	template<typename T, typename... Args>
 	T* make(Args ...ctorArgs){

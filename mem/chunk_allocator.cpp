@@ -21,10 +21,7 @@ usize A::free_chunk_count() const {
 void* A::alloc(usize n){
 	void* p = alloc_undef(n);
 	if(p != nullptr){
-		byte* bp = (byte*)p;
-		for(usize i = 0; i < n; i += 1){
-			bp[i] = 0;
-		}
+		mem_zero(p, n);
 	}
 	return p;
 }

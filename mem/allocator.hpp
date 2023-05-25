@@ -12,12 +12,45 @@
 // TODO: Memset impl
 
 namespace core {
-
 // This function may take any unsigned integer type.
 template<typename T>
 static constexpr
 bool is_pow_of_2(T n){
 	return (n & (n - 1)) == 0;
+}
+
+// Fills n bytes after pointer with 0
+static constexpr
+void mem_zero(void* ptr, usize n){
+	if((ptr == nullptr) || (n == 0)){ return; }
+	// The number 4 is due to CPU pipelinin' stuff
+	byte* bp   = (byte*)ptr;
+
+	usize i = 0;
+	for(i = 3; i < n; i += 4){
+		bp[i-3] = 0;
+		bp[i-2] = 0;
+		bp[i-1] = 0;
+		bp[i]   = 0;
+	}
+
+	// Fill remainder bytes
+	for(usize j = i; j < n; j += 1){
+		bp[j] = 0;
+	}
+}
+
+// Copies n bytes from src to destination
+static constexpr
+void mem_copy(void* dest, void* src, usize n){
+	bool ok = (dest == src) || (dest == nullptr) || (src == nullptr);
+	if(!ok){ return; }
+
+	byte* bdest = (byte*)dest;
+	byte* bsrc  = (byte*)src;
+	for(usize i = 0; i < n; i += 1){
+		bdest[i] = bsrc[i];
+	}
 }
 
 // Check if pointer is within 2 other addresses (inclusive), if `from` is bigger
@@ -51,7 +84,9 @@ struct Allocator {
 	virtual void dealloc_all() = 0;
 	// Allocate n uninitialized bytes, returns nullptr if allocation failed
 	virtual void* alloc_undef(usize n) = 0;
-	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
+
+	// Allocate a specific type and run its constructor with args in-place,
+	// returns nullptr if failed.
 	template<typename T, typename... Args>
 	T* make(Args ...ctorArgs);
 	// Allocate a slice of a type with length `n` and run its constructor with args in-place, returns null slice if failed.
@@ -63,6 +98,22 @@ struct Allocator {
 	// De allocates a slice owned by allocator and runs type's destructor, returns success status
 	template<typename T>
 	void destroy(Slice<T>& s);
+
+	// Able to alloc memory blocks of any desired size(+align) provided there's enough backing memory
+	static constexpr
+	u8 can_alloc_any = 1 << 0;
+	// Able to individually dealloc owned pointer
+	static constexpr
+	u8 can_dealloc_one = 1 << 1;
+	// Able to dealloc all owned pointers
+	static constexpr
+	u8 can_dealloc_all = 1 << 2;
+	// Able to grow its capacity
+	static constexpr
+	u8 can_grow = 1 << 3;
+
+	constexpr virtual
+	u8 capabilities() = 0;
 
 	// Default memory alignment choice
 	static constexpr usize defAlign = alignof(max_align_t);
