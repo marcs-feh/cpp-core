@@ -1,5 +1,5 @@
 CC := clang++ -std=c++20
-LD := clang++ -fuse-ld=mold
+LD := clang++
 AR := ar
 override CFLAGS := -Os -march=native -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
 override LDFLAGS := $(LDFLAGS) -lm -L.

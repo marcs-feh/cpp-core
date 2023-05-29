@@ -2,6 +2,8 @@
 #include "result.hpp"
 #include "dummy.cpp"
 
+using namespace core;
+
 void test_result(){
 	struct Error { int code = 69; };
 	Test T("Result");

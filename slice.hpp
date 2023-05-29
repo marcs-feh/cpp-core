@@ -31,13 +31,13 @@ struct Slice {
 	constexpr operator bool(){ return !null(); }
 
 	// Bounds checked access
-	T& at(usize idx) & {
+	T& at(usize idx) {
 		Panic_Assert((idx < lenght) && (data != nullptr), "Bad access to slice");
 		return data[idx];
 	}
 
 	// Bounds unchecked access when RELEASE_MODE is enabled
-	T& operator[](usize idx) & {
+	T& operator[](usize idx) {
 		Assert((idx < lenght) && (data != nullptr), "Bad access to slice");
 		return data[idx];
 	}
@@ -52,13 +52,13 @@ struct Slice {
 	}
 
 	// Bounds and null checked access (const)
-	const T& at(usize idx) const& {
+	const T& at(usize idx) const {
 		Panic_Assert((idx < lenght) && (data != nullptr), "Bad access to slice");
 		return data[idx];
 	}
 
 	// Unchecked access when RELEASE_MODE is enabled (const)
-	const T& operator[](usize idx) const& {
+	const T& operator[](usize idx) const {
 		Assert((idx < lenght) && (data != nullptr), "Bad access to slice");
 		return data[idx];
 	}

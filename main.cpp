@@ -10,16 +10,18 @@
 #include "_tests/bitfield.cpp"
 #include "_tests/slice.cpp"
 #include "_tests/complex.cpp"
+#include "_tests/array.cpp"
 
 int main() {
 	test_bumpAllocator();
+	test_chunkAllocator();
 	test_maybe();
 	test_result();
 	test_defer();
 	test_bitfield();
 	test_slice();
 	test_complex();
-	test_chunkAllocator();
+	test_array();
 	return 0;
 }
 

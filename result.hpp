@@ -17,8 +17,13 @@ struct Result {
 	};
 	bool is_error;
 
-	constexpr bool ok() const { return !is_error; }
-	constexpr operator bool() { return !is_error; }
+	constexpr bool ok() const {
+		return !is_error;
+	}
+
+	constexpr operator bool() const {
+		return !is_error;
+	}
 
 	// Data access
 	T& get() & {
