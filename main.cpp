@@ -11,6 +11,7 @@
 #include "_tests/slice.cpp"
 #include "_tests/complex.cpp"
 #include "_tests/array.cpp"
+#include "_tests/static_list.cpp"
 
 int main() {
 	test_bumpAllocator();
@@ -22,6 +23,7 @@ int main() {
 	test_slice();
 	test_complex();
 	test_array();
+	test_staticList();
 	return 0;
 }
 

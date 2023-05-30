@@ -71,16 +71,6 @@ struct Slice {
 		return Slice(data + from, upto - from);
 	}
 
-	// 2 slices are equal if they have the same size and their elements are equal
-	constexpr
-	bool operator==(const Slice& s) const {
-		if(s.lenght != lenght){ return false; }
-		for(usize i = 0; i < lenght; i += 1){
-			if(s[i] != data[i]){ return false; }
-		}
-		return true;
-	}
-
 	Slice() : lenght{0}, data{0} {}
 
 	Slice(T* p, usize l) : lenght(l), data(p) {}
@@ -105,5 +95,15 @@ struct Slice {
 	~Slice() = default;
 };
 
+// 2 slices are equal if they have the same size and their elements are equal
+template<typename T>
+constexpr
+bool operator==(const Slice<T>& l, const Slice<T>& r){
+	if(l.lenght != r.lenght){ return false; }
+	for(usize i = 0; i < l.len(); i += 1){
+		if(l.data[i] != r.data[i]){ return false; }
+	}
+	return true;
+}
 }
 #endif /* Include guard */
