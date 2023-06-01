@@ -5,7 +5,6 @@
 
 using namespace core;
 
-
 template<typename T, usize N>
 void print_list(const StaticList<T, N>& l) {
 	std::cout << "[ ";
@@ -48,7 +47,7 @@ void test_staticList(){
 	{
 		StaticList<int, 6> l0;
 		StaticList<int, 6> l1;
-		print_list(l0);
+		// print_list(l0);
 		l0.push(4); l0.push(2); l0.push(0);
 		l1.push(4); l1.push(2); l1.push(0);
 		Tp(l0 == l1);
@@ -59,6 +58,11 @@ void test_staticList(){
 		l1.insert(1, 0);
 		l1.insert(2, 1);
 		Tp(l0 != l1);
-		print_list(l0);
+		// print_list(l0);
+		l0.remove(1);
+		Tp(l0[0] == 6);
+		l0.remove(0);
+		Tp(l0[0] == 4);
+		// print_list(l0);
 	}
 }

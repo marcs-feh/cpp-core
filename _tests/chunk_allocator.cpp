@@ -1,8 +1,5 @@
-#ifndef _chunk_allocator_cpp_include_
-#define _chunk_allocator_cpp_include_
-
 #include "test/test.hpp"
-#include "mem/chunk_allocator.hpp"
+#include "mem/chunk_allocator.cpp"
 #include "defer.hpp"
 
 #include "dummy.cpp"
@@ -93,7 +90,3 @@ void test_chunkAllocator(){
 	}
 
 }
-
-
-
-#endif /* Include guard */

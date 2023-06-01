@@ -1,6 +1,3 @@
-#ifndef _slice_cpp_include_
-#define _slice_cpp_include_
-
 #include "test/test.hpp"
 #include "slice.hpp"
 using namespace core;
@@ -24,6 +21,3 @@ void test_slice(){
 	Tp(!s1 && s0);
 	Tp(s0);
 }
-
-
-#endif /* Include guard */

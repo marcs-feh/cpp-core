@@ -1,15 +1,15 @@
-#include "mem/bump_allocator.hpp"
+#include "mem/linear_allocator.cpp"
 #include "test/test.hpp"
 using namespace core;
 
 #include "dummy.cpp"
 
-void test_bumpAllocator(){
-	Test T("Bump Allocator");
+void test_linearAllocator(){
+	Test T("Linear Allocator");
 	constexpr usize n = 64;
 	void* buf = new byte[n];
 
-	BumpAllocator al(buf, n);
+	LinearAllocator al(buf, n);
 	Tp(al.buf != nullptr);
 	Tp(al.cap == n);
 	Tp(al.off == 0);
@@ -45,6 +45,18 @@ void test_bumpAllocator(){
 		Tp(A::ctorUses == aCount);
 		al.destroy(aa);
 		Tp(A::dtorUses == aCount);
+	}
+
+	{
+		LinearAllocator al0(buf, 20);
+		Tp(al0.buf == buf);
+		Tp(al0.cap == 20);
+		LinearAllocator al1 = move(al0);
+		Tp(al0.buf == nullptr);
+		Tp(al0.cap == 0);
+		Tp(al1.buf == buf);
+		Tp(al1.cap == 20);
+
 	}
 
 	delete [] (byte*)buf;

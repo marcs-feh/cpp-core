@@ -4,6 +4,7 @@
 #include "types.hpp"
 #include "utils.hpp"
 #include "assert.hpp"
+#include "slice.hpp"
 
 namespace core {
 
@@ -33,11 +34,28 @@ struct StaticList {
 	}
 
 	void insert(const T& x, usize idx){
-		if((lenght + 1) > N){ return; }
+		if((lenght + 1) > N){
+			Assert(idx < lenght, "Index out of bounds");
+			return;
+		}
 		push(x);
-		for(usize i = len() - 1; i > idx; i -= 1){
+		for(usize i = lenght - 1; i > idx; i -= 1){
 			swap(data[i], data[i - 1]);
 		}
+	}
+
+	// Does nothing on idx out of bounds on RELEASE_MODE
+	void remove(usize idx){
+		if(idx >= lenght){
+			Assert(idx < lenght, "Index out of bounds");
+			return;
+		}
+
+		for(usize i = idx + 1; i < lenght; i += 1){
+			swap(data[i], data[i - 1]);
+		}
+		pop();
+		return;
 	}
 
 	T& at(usize idx){

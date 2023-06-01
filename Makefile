@@ -1,7 +1,7 @@
 CC := clang++ -std=c++20
 LD := clang++
 AR := ar
-override CFLAGS := -Os -march=native -pipe -Wall -Wextra -fPIC -I. $(CFLAGS)
+override CFLAGS := -O2 -pipe -march=native -Wall -Wextra -fPIC -I. $(CFLAGS)
 override LDFLAGS := $(LDFLAGS) -lm -L.
 
 .PHONY: clean run list
@@ -15,28 +15,15 @@ list:
 	@echo "CFLAGS = $(CFLAGS)"
 	@echo "LDFLAGS = $(LDFLAGS)"
 
-build: bin/test.bin
+build:
 	@mkdir -p bin
 
 run: bin/test.bin
 	@mkdir -p bin
 	@./bin/test.bin
 
-bin/test.bin: bin/main.o bin/libc++core.a
-	$(LD) bin/main.o bin/libc++core.a -o bin/test.bin $(LDFLAGS)
-
-bin/libc++core.a: bin/mem.bump_allocator.o bin/mem.chunk_allocator.o
-	$(AR) rcs bin/libc++core.a bin/mem.bump_allocator.o bin/mem.chunk_allocator.o
-
-bin/main.o: main.cpp _tests/*.cpp
-	$(CC) $(CFLAGS) -c main.cpp -o bin/main.o
-
-bin/mem.bump_allocator.o: mem/bump_allocator.cpp
-	$(CC) $(CFLAGS) -c mem/bump_allocator.cpp -o bin/mem.bump_allocator.o
-
-bin/mem.chunk_allocator.o: mem/chunk_allocator.cpp
-	$(CC) $(CFLAGS) -c mem/chunk_allocator.cpp -o bin/mem.chunk_allocator.o
-
+bin/test.bin: main.cpp _tests/*.cpp
+	$(CC) $(CFLAGS) main.cpp -o bin/test.bin $(LDFLAGS)
 
 clean:
 	rm -f bin/*

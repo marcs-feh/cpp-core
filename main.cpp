@@ -14,7 +14,7 @@
 #include "_tests/static_list.cpp"
 
 int main() {
-	test_bumpAllocator();
+	test_linearAllocator();
 	test_chunkAllocator();
 	test_maybe();
 	test_result();

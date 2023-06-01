@@ -1,6 +1,3 @@
-#ifndef _complex_cpp_include_
-#define _complex_cpp_include_
-
 #include "test/test.hpp"
 #include "complex.hpp"
 using namespace core;
@@ -42,5 +39,3 @@ void test_complex(){
 		Tp(abs(Complex128(3, 4)) == 5);
 	}
 }
-
-#endif /* Include guard */
