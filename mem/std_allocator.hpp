@@ -6,7 +6,7 @@
 
 // TODO: ownership system
 namespace core {
-struct StdAllocator : Allocator {
+struct LibcAllocator : Allocator {
 	void* alloc(usize n) override {
 		void* p = std::malloc(n);
 		if(p != nullptr){ mem_zero(p, n); }
@@ -26,15 +26,15 @@ struct StdAllocator : Allocator {
 
 	constexpr
 	u8 capabilities() override {
-		return can_alloc_any | can_dealloc_one | can_grow;
+		return can_alloc_any | can_dealloc_one | dynamic_cap;
 	}
 
-	StdAllocator() = default;
-	StdAllocator(const StdAllocator& s) = default;
-	StdAllocator& operator=(const StdAllocator& s) = default;
-	StdAllocator(StdAllocator&& s) = default;
-	StdAllocator& operator=(StdAllocator&& s) = default;
-	~StdAllocator() = default;
+	LibcAllocator() = default;
+	LibcAllocator(const LibcAllocator& s) = default;
+	LibcAllocator& operator=(const LibcAllocator& s) = default;
+	LibcAllocator(LibcAllocator&& s) = default;
+	LibcAllocator& operator=(LibcAllocator&& s) = default;
+	~LibcAllocator() = default;
 };
 }
 

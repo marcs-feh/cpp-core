@@ -108,9 +108,9 @@ struct Allocator {
 	// Able to dealloc all owned pointers
 	static constexpr
 	u8 can_dealloc_all = 1 << 2;
-	// Able to grow its capacity
+	// Able to change capacity (increase or decrease)
 	static constexpr
-	u8 can_grow = 1 << 3;
+	u8 dynamic_cap = 1 << 3;
 
 	constexpr virtual
 	u8 capabilities() = 0;
