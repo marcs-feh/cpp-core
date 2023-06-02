@@ -12,6 +12,7 @@
 #include "_tests/complex.cpp"
 #include "_tests/array.cpp"
 #include "_tests/static_list.cpp"
+#include "_tests/static_stack.cpp"
 
 int main() {
 	test_linearAllocator();
@@ -24,6 +25,7 @@ int main() {
 	test_complex();
 	test_array();
 	test_staticList();
+	test_staticStack();
 	return 0;
 }
 
