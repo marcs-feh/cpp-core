@@ -4,7 +4,7 @@
 #include "allocator.hpp"
 
 namespace core {
-struct ChunkAllocator : Allocator {
+struct ChunkAllocator {
 	struct Node {
 		Node* next = nullptr;
 	};
@@ -31,7 +31,7 @@ struct ChunkAllocator : Allocator {
 	FreeList free_list;
 
 	constexpr
-	u8 capabilities() override {
+	u8 capabilities(){
 		return can_dealloc_one | can_dealloc_all;
 	}
 
@@ -49,7 +49,7 @@ struct ChunkAllocator : Allocator {
 
 	// Bump allocator always allocates the same size, alloc will check if n fits
 	// into a chunk and if a free chunk is available.
-	void* alloc(usize n) override {
+	void* alloc(usize n){
 		void* p = alloc_undef(n);
 		if(p != nullptr){
 			mem_zero(p, n);
@@ -57,19 +57,19 @@ struct ChunkAllocator : Allocator {
 		return p;
 	}
 
-	void dealloc(void* ptr) override {
+	void dealloc(void* ptr){
 		Node* node = (Node*)ptr;
 		free_list.add(node);
 	}
 
-	void dealloc_all() override {
+	void dealloc_all(){
 		byte* ptr = (byte*)data;
 		for(uintptr i = 0; i < chunk_count; i += 1){
 			free_list.add((Node*)(&ptr[i * chunk_size]));
 		}
 	}
 
-	void* alloc_undef(usize n) override {
+	void* alloc_undef(usize n){
 		if((n > chunk_size) || (free_list.head == nullptr)){
 			return nullptr;
 		}
@@ -81,11 +81,11 @@ struct ChunkAllocator : Allocator {
 	ChunkAllocator(void* buf, usize bufsize, usize chunk_sz, usize chunk_n)
 	: free_list() {
 		uintptr unaligned = (uintptr)buf;
-		uintptr aligned   = align_forward(unaligned, defAlign);
+		uintptr aligned   = align_forward(unaligned, default_align);
 		uintptr shift     = aligned - unaligned;
 
 		usize true_bufsize   = bufsize - shift;
-		usize true_chunksize = align_forward(chunk_sz, defAlign);
+		usize true_chunksize = align_forward(chunk_sz, default_align);
 		usize min_required   = sizeof(FreeList) * chunk_n;
 		usize will_need      = max(true_chunksize * chunk_n, min_required);
 
@@ -127,54 +127,7 @@ struct ChunkAllocator : Allocator {
 	ChunkAllocator(const ChunkAllocator& c) = delete;
 	ChunkAllocator& operator=(const ChunkAllocator& c) = delete;
 
-
 	~ChunkAllocator(){}
-
-	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
-	template<typename T, typename... Args>
-	T* make(Args ...ctorArgs){
-		T* p = (T*)alloc(sizeof(T));
-		if(p != nullptr){
-			new (p) T(ctorArgs...);
-		}
-		return p;
-	}
-
-	// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
-	template<typename T, typename... Args>
-	Slice<T> makeSlice(usize n, Args ...ctorArgs){
-		if(n == 0){ return Slice<T>(); }
-
-		T* p = (T*)alloc(sizeof(T) * n);
-		Slice<T> s = Slice(p, n);
-
-		if(p != nullptr){
-			usize n = s.len();
-			for(usize i = 0; i < n; i += 1){
-				new (s.data + i) T(ctorArgs...);
-			}
-		}
-
-		return s;
-	}
-
-	// De allocates a pointer owned by allocator and runs type's destructor
-	template<typename T>
-	void destroy(T* ptr){
-		if(!ptr){ return; }
-		ptr->~T();
-		dealloc(ptr);
-	}
-
-	template<typename T>
-	void destroy(Slice<T>& s){
-		if(!s){ return; }
-		usize n = s.len();
-		for(usize i = 0; i < n; i += 1){
-			s[i].~T();
-		}
-		dealloc(s.ptr());
-	}
 
 	static_assert(sizeof(FreeList) == sizeof(Node), "Free list isnt the same size as node, that's a big problem");
 };

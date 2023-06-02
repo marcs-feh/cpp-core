@@ -15,7 +15,7 @@ void test_chunkAllocator(){
 
 	auto al = ChunkAllocator(buf, n, 30, ch_num);
 	Tp(al.data);
-	Tp(al.chunk_size == align_forward(usize(30), Allocator::defAlign));
+	Tp(al.chunk_size == align_forward(usize(30), default_align));
 	Tp(al.chunk_count == ch_num);
 
 	{
@@ -55,19 +55,19 @@ void test_chunkAllocator(){
 	{
 		A::reset();
 		al.dealloc_all();
-		A* ap = al.make<A>();
+		A* ap = make<A>(al);
 		Tp(ap != nullptr);
 		Tp(A::ctorUses == 1);
-		al.destroy(ap);
+		destroy(al, ap);
 		Tp(A::dtorUses == 1);
 	}
 	{
 		al.dealloc_all();
 		A::reset();
-		auto as = al.makeSlice<A>(4);
+		auto as = makeSlice<A>(al, 4);
 		Tp(as);
 		Tp(A::ctorUses == 4);
-		al.destroy(as);
+		destroy(al, as);
 		Tp(A::dtorUses == 4);
 	}
 

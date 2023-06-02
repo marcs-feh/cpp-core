@@ -1,6 +1,6 @@
 # C++ Core
 
-This is a collection of C++ utilities, they are not a replacement for the STL,
+This is a collection of C++20 utilities, they are not a replacement for the STL,
 although I use them as *alternatives*.
 
 The current main design goals are:

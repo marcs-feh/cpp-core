@@ -32,18 +32,18 @@ void test_linearAllocator(){
 
 	{
 		A::reset();
-		A *e = al.make<A>();
+		A *e = make<A>(al);
 		Tp(A::ctorUses == 1);
-		al.destroy(e);
+		destroy(al, e);
 		Tp(A::dtorUses == 1);
 	}
 	al.dealloc_all();
 	{
 		A::reset();
 		constexpr uint aCount = 5;
-		auto aa = al.makeSlice<A>(aCount);
+		auto aa = makeSlice<A>(al, aCount);
 		Tp(A::ctorUses == aCount);
-		al.destroy(aa);
+		destroy(al, aa);
 		Tp(A::dtorUses == aCount);
 	}
 

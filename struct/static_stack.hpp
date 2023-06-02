@@ -56,7 +56,7 @@ struct StaticStack {
 		return opt;
 	}
 
-	StaticStack(){}
+	StaticStack() = default;
 
 	StaticStack(const StaticStack& s) : lenght(s.lenght) {
 		for(usize i = 0; i < s.lenght; i += 1){

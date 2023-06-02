@@ -6,20 +6,20 @@
 #include "slice.hpp"
 
 namespace core {
-struct LinearAllocator : Allocator {
+struct LinearAllocator {
 	usize off = 0;
 	usize cap = 0;
 	void* buf = nullptr;
 
 	constexpr
-	u8 capabilities() override {
+	u8 capabilities(){
 		return can_alloc_any | can_dealloc_all;
 	}
 
-	void* alloc_undef(usize n) override {
+	void* alloc_undef(usize n){
 		uintptr buf = (uintptr)this->buf;
 		uintptr base = (buf + off);
-		uintptr pad = align_forward(base, defAlign) - base;
+		uintptr pad = align_forward(base, default_align) - base;
 
 		// No memory left.
 		if((base + pad + n) > (buf + cap)){
@@ -32,7 +32,7 @@ struct LinearAllocator : Allocator {
 		return ptr;
 	}
 
-	void* alloc(usize n) override {
+	void* alloc(usize n){
 		byte* p = (byte*)alloc_undef(n);
 		if(p != nullptr){
 			mem_zero(p, n);
@@ -41,11 +41,11 @@ struct LinearAllocator : Allocator {
 	}
 
 	// Does not support individual dealloc
-	void dealloc(void*) override {
+	void dealloc(void*){
 		return;
 	}
 
-	void dealloc_all() override {
+	void dealloc_all(){
 		off = 0;
 	}
 
@@ -75,41 +75,5 @@ struct LinearAllocator : Allocator {
 	void operator=(const LinearAllocator&) = delete;
 
 	~LinearAllocator(){}
-
-	template<typename T, typename... Args>
-	T* make(Args ...ctorArgs){
-		T* ptr = (T*)alloc(sizeof(T));
-		if(ptr == nullptr){ return nullptr; }
-		return new (ptr) T(ctorArgs...);
-	}
-
-	template<typename T, typename... Args>
-	Slice<T> makeSlice(usize n, Args ...ctorArgs){
-		T* ptr = (T*)alloc(sizeof(T) * n);
-		Slice<T> s(ptr, n);
-		if(s){
-			for(usize i = 0; i < n; i += 1){
-				new (&ptr[i]) T(ctorArgs...);
-			}
-		}
-		return s;
-	}
-
-	template<typename T>
-	void destroy(T* ptr){
-		if(ptr == nullptr){ return; }
-		ptr->~T();
-	}
-
-	template<typename T>
-	void destroy(Slice<T>& s){
-		if(!s){ return; }
-		usize n = s.len();
-		for(usize i = 0; i < n; i += 1){
-			s[i].~T();
-		}
-		dealloc(s.ptr());
-		s = Slice<T>(); // Clear slice
-	}
 };
 }

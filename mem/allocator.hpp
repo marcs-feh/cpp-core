@@ -6,12 +6,24 @@
 #include "utils.hpp"
 #include "slice.hpp"
 #include <cstddef>
+#include <concepts>
 
 // TODO: Stop using virtual for Allocator
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
 // TODO: Memset impl
 
 namespace core {
+// Default memory alignment choice
+constexpr usize default_align = alignof(max_align_t);
+// Able to alloc memory blocks of any desired size(+align) provided there's enough backing memory
+constexpr u8 can_alloc_any = 1 << 0;
+// Able to individually dealloc owned pointer
+constexpr u8 can_dealloc_one = 1 << 1;
+// Able to dealloc all owned pointers
+constexpr u8 can_dealloc_all = 1 << 2;
+// Able to change capacity (increase or decrease)
+constexpr u8 dynamic_cap = 1 << 3;
+
 // This function may take any unsigned integer type.
 template<typename T>
 static constexpr
@@ -74,50 +86,69 @@ T align_forward(T p, T a){
 	return p;
 }
 
-// Memory allocator interface
-struct Allocator {
-	// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
-	virtual void* alloc(usize n) = 0;
-	// Free a pointer. Freeing nullptr doesnt do anything.
-	virtual void dealloc(void* ptr) = 0;
-	// Free all pointers owned by allocator.
-	virtual void dealloc_all() = 0;
-	// Allocate n uninitialized bytes, returns nullptr if allocation failed
-	virtual void* alloc_undef(usize n) = 0;
+using std::same_as;
+using std::convertible_to;
 
-	// Allocate a specific type and run its constructor with args in-place,
-	// returns nullptr if failed.
-	template<typename T, typename... Args>
-	T* make(Args ...ctorArgs);
-	// Allocate a slice of a type with length `n` and run its constructor with args in-place, returns null slice if failed.
-	template<typename T, typename... Args>
-	Slice<T> makeSlice(usize n, Args ...ctorArgs);
-	// De allocates a pointer owned by allocator and runs type's destructor, returns success status
-	template<typename T>
-	void destroy(T* ptr);
-	// De allocates a slice owned by allocator and runs type's destructor, returns success status
-	template<typename T>
-	void destroy(Slice<T>& s);
-
-	// Able to alloc memory blocks of any desired size(+align) provided there's enough backing memory
-	static constexpr
-	u8 can_alloc_any = 1 << 0;
-	// Able to individually dealloc owned pointer
-	static constexpr
-	u8 can_dealloc_one = 1 << 1;
-	// Able to dealloc all owned pointers
-	static constexpr
-	u8 can_dealloc_all = 1 << 2;
-	// Able to change capacity (increase or decrease)
-	static constexpr
-	u8 dynamic_cap = 1 << 3;
-
-	constexpr virtual
-	u8 capabilities() = 0;
-
-	// Default memory alignment choice
-	static constexpr usize defAlign = alignof(max_align_t);
+template<typename Impl>
+concept Allocator = requires(Impl al, usize n, void* ptr){
+// Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
+{ al.alloc(n) } -> same_as<void*>;
+// Free a pointer. Freeing nullptr doesnt do anything.
+{ al.dealloc(ptr) } -> same_as<void>;
+// Free all pointers owned by allocator.
+{ al.dealloc_all() } -> same_as<void>;
+// Allocate n uninitialized bytes, returns nullptr if allocation failed
+{ al.alloc_undef(n) } -> same_as<void*>;
+// Get allocator capabilities
+{ al.capabilities() } -> convertible_to<u8>;
 };
+
+template<typename T, typename ...Args>
+T* make(Allocator auto& al, Args&& ...args){
+	T* ptr = reinterpret_cast<T*>(al.alloc(sizeof(T)));
+	if(ptr){
+		new (ptr) T(args...);
+	}
+	return ptr;
+}
+
+// Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
+template<typename T, typename... Args>
+Slice<T> makeSlice(Allocator auto& al, usize n, Args ...ctorArgs){
+	if(n == 0){ return Slice<T>(); }
+
+	T* p = (T*)al.alloc(sizeof(T) * n);
+	Slice<T> s = Slice(p, n);
+
+	if(p != nullptr){
+		usize n = s.len();
+		for(usize i = 0; i < n; i += 1){
+			new (s.data + i) T(ctorArgs...);
+		}
+	}
+
+	return s;
+}
+
+// De allocates a pointer owned by allocator and runs type's destructor
+template<typename T>
+void destroy(Allocator auto& al, T* ptr){
+	if(!ptr){ return; }
+	ptr->~T();
+	al.dealloc(ptr);
+}
+
+template<typename T>
+void destroy(Allocator auto& al, Slice<T>& s){
+	if(!s){ return; }
+	usize n = s.len();
+	for(usize i = 0; i < n; i += 1){
+		s[i].~T();
+	}
+	al.dealloc(s.ptr());
+}
+
+
 
 }
 

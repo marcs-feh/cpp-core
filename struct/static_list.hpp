@@ -78,7 +78,7 @@ struct StaticList {
 		return data[idx];
 	}
 
-	StaticList(){}
+	StaticList(){};
 
 	StaticList(const StaticList& s) : lenght(s.lenght) {
 		for(usize i = 0; i < s.lenght; i += 1){
