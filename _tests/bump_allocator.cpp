@@ -41,7 +41,7 @@ void test_linearAllocator(){
 	{
 		A::reset();
 		constexpr uint aCount = 5;
-		auto aa = makeSlice<A>(al, aCount);
+		auto aa = make_slice<A>(al, aCount);
 		Tp(A::ctorUses == aCount);
 		destroy(al, aa);
 		Tp(A::dtorUses == aCount);

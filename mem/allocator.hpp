@@ -114,7 +114,7 @@ T* make(Allocator auto& al, Args&& ...args){
 
 // Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
 template<typename T, typename... Args>
-Slice<T> makeSlice(Allocator auto& al, usize n, Args ...ctorArgs){
+Slice<T> make_slice(Allocator auto& al, usize n, Args ...ctorArgs){
 	if(n == 0){ return Slice<T>(); }
 
 	T* p = (T*)al.alloc(sizeof(T) * n);
@@ -147,8 +147,6 @@ void destroy(Allocator auto& al, Slice<T>& s){
 	}
 	al.dealloc(s.ptr());
 }
-
-
 
 }
 

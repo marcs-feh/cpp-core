@@ -64,7 +64,7 @@ void test_chunkAllocator(){
 	{
 		al.dealloc_all();
 		A::reset();
-		auto as = makeSlice<A>(al, 4);
+		auto as = make_slice<A>(al, 4);
 		Tp(as);
 		Tp(A::ctorUses == 4);
 		destroy(al, as);
