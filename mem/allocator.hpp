@@ -8,8 +8,8 @@
 #include <cstddef>
 #include <concepts>
 
-// TODO: Stop using virtual for Allocator
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
+// TODO: Be able to disable concepts
 // TODO: Memset impl
 
 namespace core {
@@ -92,7 +92,7 @@ using std::convertible_to;
 template<typename Impl>
 concept Allocator = requires(Impl al, usize n, void* ptr){
 // Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
-{ al.alloc(n) } -> same_as<void*>;
+{ al.alloc(n) } -> convertible_to<void*>;
 // Free a pointer. Freeing nullptr doesnt do anything.
 { al.dealloc(ptr) } -> same_as<void>;
 // Free all pointers owned by allocator.

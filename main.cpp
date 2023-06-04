@@ -14,6 +14,8 @@
 #include "_tests/static_list.cpp"
 #include "_tests/static_stack.cpp"
 
+#include "struct/dyn_array.hpp"
+
 int main() {
 	test_linearAllocator();
 	test_chunkAllocator();
