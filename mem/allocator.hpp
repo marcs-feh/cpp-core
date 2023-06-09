@@ -86,11 +86,12 @@ T align_forward(T p, T a){
 	return p;
 }
 
+#if __cplusplus >= 202002L
 using std::same_as;
 using std::convertible_to;
 
 template<typename Impl>
-concept Allocator = requires(Impl al, usize n, void* ptr){
+concept AllocatorLike = requires(Impl al, usize n, void* ptr){
 // Allocate n bytes, all initialized to 0, returns nullptr if allocation failed
 { al.alloc(n) } -> convertible_to<void*>;
 // Free a pointer. Freeing nullptr doesnt do anything.
@@ -102,9 +103,12 @@ concept Allocator = requires(Impl al, usize n, void* ptr){
 // Get allocator capabilities
 { al.capabilities() } -> convertible_to<u8>;
 };
+#else
+#define AllocatorLike typename 
+#endif
 
-template<typename T, typename ...Args>
-T* make(Allocator auto& al, Args&& ...args){
+template<typename T, AllocatorLike Alloc, typename... Args>
+T* make(Alloc& al, Args&& ...args){
 	T* ptr = reinterpret_cast<T*>(al.alloc(sizeof(T)));
 	if(ptr){
 		new (ptr) T(args...);
@@ -113,12 +117,12 @@ T* make(Allocator auto& al, Args&& ...args){
 }
 
 // Allocate a specific type and run its constructor with args in-place, returns nullptr if failed.
-template<typename T, typename... Args>
-Slice<T> make_slice(Allocator auto& al, usize n, Args ...ctorArgs){
+template<typename T, AllocatorLike Alloc, typename... Args>
+Slice<T> make_slice(Alloc& al, usize n, Args ...ctorArgs){
 	if(n == 0){ return Slice<T>(); }
 
 	T* p = (T*)al.alloc(sizeof(T) * n);
-	Slice<T> s = Slice(p, n);
+	auto s = Slice<T>(p, n);
 
 	if(p != nullptr){
 		usize n = s.len();
@@ -131,15 +135,15 @@ Slice<T> make_slice(Allocator auto& al, usize n, Args ...ctorArgs){
 }
 
 // De allocates a pointer owned by allocator and runs type's destructor
-template<typename T>
-void destroy(Allocator auto& al, T* ptr){
+template<typename T, AllocatorLike Alloc>
+void destroy(Alloc& al, T* ptr){
 	if(!ptr){ return; }
 	ptr->~T();
 	al.dealloc(ptr);
 }
 
-template<typename T>
-void destroy(Allocator auto& al, Slice<T>& s){
+template<typename T, AllocatorLike Alloc>
+void destroy(Alloc& al, Slice<T>& s){
 	if(!s){ return; }
 	usize n = s.len();
 	for(usize i = 0; i < n; i += 1){

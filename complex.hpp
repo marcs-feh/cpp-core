@@ -3,18 +3,18 @@
 
 namespace core {
 struct Complex64 {
-	f32 real;
-	f32 imag;
+	f32 real = 0;
+	f32 imag = 0;
 
-	constexpr Complex64() = default;
+	constexpr Complex64(){}
 	constexpr Complex64(f32 r, f32 i) : real(r), imag(i) {}
 };
 
 struct Complex128 {
-	f64 real;
-	f64 imag;
+	f64 real = 0;
+	f64 imag = 0;
 
-	constexpr Complex128() = default;
+	constexpr Complex128(){}
 	constexpr Complex128(f64 r, f64 i) : real(r), imag(i) {}
 };
 

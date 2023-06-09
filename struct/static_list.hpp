@@ -153,7 +153,13 @@ bool operator==(const StaticList<T,N>& l, const StaticList<T,N>& r){
 	}
 	return true;
 }
+template<typename T, usize N>
+constexpr
+bool operator!=(const StaticList<T,N>& l, const StaticList<T,N>& r){
+	return !(l == r);
 }
+}
+
 
 
 #endif /* Include guard */
