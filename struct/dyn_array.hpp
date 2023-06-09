@@ -5,7 +5,7 @@
 #include "mem/allocator.hpp"
 
 namespace core {
-template<typename T>
+template<typename T, Allocator auto alloc>
 struct DynArray {
 	usize lenght;
 	usize capacity;
@@ -13,7 +13,6 @@ struct DynArray {
 
 	~DynArray(){}
 };
-
 }
 
 #endif /* Include guard */
