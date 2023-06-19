@@ -29,31 +29,15 @@ struct StaticStack {
 		lenght += 1;
 	}
 
-	// Moves top of stack to x
-	void pop(T& x){
+	// Get top out of stack
+	T pop(){
 		if(lenght == 0){
-			Assert(lenght > 0, "Stack underflow"); return;
+			Assert(lenght > 0, "Stack underflow"); return data[0];
 		}
 		lenght -= 1;
-		x = move(data[lenght]);
+		T x = move(data[lenght]);
 		data[lenght].~T();
-	}
-
-	// Destroy top of stack
-	void pop(){
-		if(lenght == 0){
-			Assert(lenght > 0, "Stack underflow"); return;
-		}
-		lenght -= 1;
-		data[lenght].~T();
-	}
-
-	// Copy of stack top
-	Maybe<T> top(){
-		Maybe<T> opt;
-		if(lenght == 0){ return opt; }
-		opt = data[lenght - 1];
-		return opt;
+		return x;
 	}
 
 	StaticStack() = default;
@@ -120,6 +104,8 @@ struct StaticStack {
 	~StaticStack(){
 		while(lenght > 0){ pop(); }
 	}
+
+	static_assert(N > 0, "Size must be greater than 0");
 };
 
 template<typename T, usize N>

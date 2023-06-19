@@ -1,5 +1,6 @@
 #include "test/test.hpp"
 #include "slice.hpp"
+
 using namespace core;
 
 void test_slice(){

@@ -58,11 +58,6 @@ struct StaticList {
 		return;
 	}
 
-	T& at(usize idx){
-		Panic_Assert(idx < lenght, "Out of bounds access");
-		return data[idx];
-	}
-
 	const T& at(usize idx) const {
 		Panic_Assert(idx < lenght, "Out of bounds access");
 		return data[idx];

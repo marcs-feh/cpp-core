@@ -15,6 +15,7 @@
 #include "_tests/static_stack.cpp"
 
 #include "struct/dyn_array.hpp"
+#include "error.hpp"
 
 int main() {
 	test_linearAllocator();
