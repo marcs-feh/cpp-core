@@ -6,7 +6,10 @@
 #include "utils.hpp"
 #include "slice.hpp"
 #include <cstddef>
+
+#if __cplusplus >= 202002L
 #include <concepts>
+#endif
 
 // TODO: Check if allocator owns dealloc'd pointer! return false if it doesnt
 // TODO: Be able to disable concepts

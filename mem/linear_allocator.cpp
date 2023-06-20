@@ -49,7 +49,7 @@ struct LinearAllocator {
 		off = 0;
 	}
 
-	LinearAllocator() = default;
+	LinearAllocator(){};
 
 	LinearAllocator(void* buffer, usize bufsize) : off{0}, cap{0} {
 		if(buffer == nullptr){
