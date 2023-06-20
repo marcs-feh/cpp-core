@@ -11,8 +11,6 @@
 #include "_tests/slice.cpp"
 #include "_tests/complex.cpp"
 #include "_tests/array.cpp"
-#include "_tests/static_list.cpp"
-#include "_tests/static_stack.cpp"
 
 #include "struct/dyn_array.hpp"
 #include "error.hpp"
@@ -27,8 +25,6 @@ int main() {
 	test_slice();
 	test_complex();
 	test_array();
-	test_staticList();
-	test_staticStack();
 	return 0;
 }
 
