@@ -1,9 +1,14 @@
 // A linear allocator is a flat array of memory that has a max capacity and an
 // offset. Allocating pushes the offset forward, and De-allocating all memory
 // is simply resetting the offset
+#ifndef _linear_allocator_cpp_include_
+#define _linear_allocator_cpp_include_
 
 #include "allocator.hpp"
 #include "slice.hpp"
+
+// TODO: handle case of resize() where ptr is last allocated, this can be quite
+// useful for dynamic arrays who use an allocator all for themselves.
 
 namespace core {
 struct LinearAllocator {
@@ -49,14 +54,22 @@ struct LinearAllocator {
 		off = 0;
 	}
 
-	LinearAllocator(){};
+	LinearAllocator() = delete;
 
-	LinearAllocator(void* buffer, usize bufsize) : off{0}, cap{0} {
+	LinearAllocator(void* buffer, usize bufsize){
 		if(buffer == nullptr){
 			return;
 		}
 		buf = buffer;
 		cap = bufsize;
+	}
+
+	LinearAllocator(Slice<byte>&& s){
+		if(s.null()){
+			return;
+		}
+		buf = static_cast<void*>(s.ptr());
+		cap = s.len();
 	}
 
 	LinearAllocator(LinearAllocator &&al) : off{al.off}, cap{al.cap}, buf{al.buf} {
@@ -77,3 +90,5 @@ struct LinearAllocator {
 	~LinearAllocator(){}
 };
 }
+
+#endif /* Include guard */

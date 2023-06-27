@@ -104,6 +104,18 @@ T abs(const T& n){
 	return n < 0 ? -n : n;
 }
 
+template<typename T>
+constexpr
+T clamp(const T& lower, T x, const T& upper){
+	if(x < lower){
+		x = lower;
+	}
+	else if(x > upper){
+		x = upper;
+	}
+	return x;
+}
+
 template<typename Tl, typename Tr>
 struct Pair {
 	Tl left;

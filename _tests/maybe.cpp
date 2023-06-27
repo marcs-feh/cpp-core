@@ -2,7 +2,6 @@
 #include "_tests/dummy.cpp"
 #include "maybe.hpp"
 
-
 void test_maybe(){
 	Test T("Maybe");
 	[[maybe_unused]]

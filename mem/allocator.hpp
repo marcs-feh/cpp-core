@@ -38,10 +38,10 @@ bool is_pow_of_2(T n){
 static constexpr
 void mem_zero(void* ptr, usize n){
 	if((ptr == nullptr) || (n == 0)){ return; }
-	// The number 4 is due to CPU pipelinin' stuff
-	byte* bp   = (byte*)ptr;
+	byte* bp = (byte*)ptr;
 
 	usize i = 0;
+	// The number 4 is due to CPU pipelinin' stuff
 	for(i = 3; i < n; i += 4){
 		bp[i-3] = 0;
 		bp[i-2] = 0;

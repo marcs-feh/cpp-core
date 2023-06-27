@@ -19,6 +19,7 @@ struct ArenaAllocator {
 		Block(LinearAllocator al, Block* next) : allocator(move(al)), next(next) {}
 	};
 
+	usize base_size = 0;
 	Block* head = nullptr;
 	Al* allocator = nullptr;
 
@@ -59,7 +60,14 @@ struct ArenaAllocator {
 	}
 
 	void* alloc(usize n){
+		void* p = alloc_undef(n);
+		if(p != nullptr){
+			mem_zero(p, n);
+		}
+		return p;
+	}
 
+	void dealloc_all(){
 	}
 
 	// Does not support individual dealloc
@@ -67,11 +75,25 @@ struct ArenaAllocator {
 		return;
 	}
 
-	// TODO: delete?
 	ArenaAllocator(){}
 
+	ArenaAllocator(Al* alloc, usize base_sz = 0){
+		if(!alloc){
+			*this = ArenaAllocator();
+			return;
+		}
+		allocator = alloc;
+		if(base_sz < min_base_size){
+			base_size = min_base_size;
+		}
+		else {
+			base_size = base_sz;
+		}
+	}
 
+	static constexpr usize min_base_size = sizeof(Block) * 2;
 };
+
 }
 
 

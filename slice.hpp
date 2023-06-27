@@ -13,8 +13,8 @@ namespace core {
 
 template<typename T>
 struct Slice {
-	usize lenght;
-	T* data;
+	usize lenght = 0;
+	T* data = nullptr;
 
 	constexpr
 	usize len() const { return lenght; }
@@ -71,7 +71,7 @@ struct Slice {
 		return Slice(data + from, upto - from);
 	}
 
-	Slice() : lenght{0}, data{0} {}
+	Slice(){}
 
 	Slice(T* p, usize l) : lenght(l), data(p) {}
 
