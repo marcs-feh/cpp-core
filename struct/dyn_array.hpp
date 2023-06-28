@@ -75,13 +75,28 @@ struct DynArray {
 		if(reserve < min_capacity){ capacity = min_capacity; }
 		data = static_cast<T*>(allocator->alloc(sizeof(data) * capacity));
 		if(data == nullptr){
-			*this = {0};
+			capacity = 0; allocator = nullptr; data = nullptr;
 		}
 	}
 
-	DynArray() = delete;
-	DynArray(const DynArray& d) = delete;
-	DynArray& operator=(const DynArray& d) = delete;
+	DynArray(){}
+
+	DynArray& operator=(DynArray&& d){
+		lenght    = exchange(d.lenght, 0);
+		capacity  = exchange(d.capacity, 0);
+		data      = exchange(d.data, nullptr);
+		allocator = exchange(d.allocator, nullptr);
+		return *this;
+	}
+
+	// TODO: remove? maybe? :/
+	DynArray(const DynArray& d) = default;
+	DynArray& operator=(const DynArray& d) = default;
+
+	template<AllocatorLike U>
+	DynArray clone(U* allocator){
+		return DynArray();
+	}
 
 	// TODO: clone()
 

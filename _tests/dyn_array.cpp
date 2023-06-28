@@ -14,7 +14,8 @@ void test_dynArray(){
 	constexpr auto n = 16 * K;
 	auto buf = Slice<byte>(new byte[n], n);
 	LinearAllocator al = LinearAllocator(move(buf));
-	DynArray a = DynArray<int, LinearAllocator>(&al);
+
+	auto a = DynArray<int, LinearAllocator>(&al);
 	{
 		auto cap = DynArray<int, LinearAllocator>::default_capacity;
 		Tp(a.cap() == cap);

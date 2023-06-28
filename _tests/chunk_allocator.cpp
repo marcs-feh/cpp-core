@@ -11,7 +11,7 @@ void test_chunkAllocator(){
 	constexpr usize n = 200;
 	constexpr usize ch_num = 5;
 	byte* buf = new byte[n];
-	Defer { delete[] buf; };
+	Defer(delete[] buf);
 
 	auto al = ChunkAllocator(buf, n, 30, ch_num);
 	Tp(al.data);
